@@ -1,0 +1,1171 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>投标自查清单与评分自测表 · 北京宣传文化引导基金委托结项验收（咨询服务）01包</title>
+<style>
+  :root{
+    --canvas:#F6F5F1;
+    --surface:#FFFFFF;
+    --surface-2:#FAF9F5;
+    --ink:#1B2320;
+    --ink-2:#4A5651;
+    --ink-3:#7C8883;
+    --line:#DCD9D1;
+    --line-strong:#BFBBB0;
+    --accent:#0E6B58;
+    --accent-soft:#E3EFEA;
+    --accent-ink:#FFFFFF;
+    --warn:#A9650D;
+    --warn-soft:#F8EEDC;
+    --risk:#9E2B25;
+    --risk-soft:#F8E6E4;
+    --radius:3px;
+    --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:18px; --sp-5:26px; --sp-6:38px; --sp-7:56px;
+    --font-body:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    --font-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--canvas); color:var(--ink);
+    font-family:var(--font-body); font-size:15.5px; line-height:1.62;
+    overflow-x:hidden;
+  }
+  .wrap{
+    width:100%; max-width:1560px; margin:0 auto;
+    padding:0 clamp(14px,3.2vw,44px);
+  }
+
+  /* ---------- 顶部 ---------- */
+  .masthead{
+    background:var(--ink); color:#EDEBE4;
+    padding:var(--sp-5) 0 var(--sp-4);
+    border-bottom:3px solid var(--accent);
+  }
+  .mast-top{display:flex;flex-wrap:wrap;gap:var(--sp-3) var(--sp-5);align-items:flex-start;justify-content:space-between}
+  .mast-id{min-width:0;flex:1 1 420px}
+  .eyebrow{
+    font-family:var(--font-mono); font-size:11.5px; letter-spacing:.14em;
+    text-transform:uppercase; color:#8FA9A1; margin:0 0 var(--sp-2);
+  }
+  h1{
+    font-size:clamp(20px,2.6vw,29px); line-height:1.28; letter-spacing:-.01em;
+    margin:0 0 var(--sp-2); font-weight:680; color:#FFFFFF;
+  }
+  .mast-sub{margin:0;font-size:13.5px;color:#A9B6B1;line-height:1.55}
+  .mast-sub b{color:#D9DFDB;font-weight:600}
+
+  .clock{
+    display:flex; gap:var(--sp-4); flex-wrap:wrap;
+    border-left:1px solid #3A443F; padding-left:var(--sp-4);
+  }
+  .clock-item{min-width:112px}
+  .clock-label{font-size:11px;letter-spacing:.08em;color:#8FA9A1;margin:0 0 2px;font-family:var(--font-mono)}
+  .clock-val{font-family:var(--font-mono);font-size:24px;font-weight:600;line-height:1.15;font-variant-numeric:tabular-nums;color:#FFFFFF}
+  .clock-val small{font-size:12px;font-weight:400;color:#A9B6B1;margin-left:3px}
+  .clock-val.hot{color:#F0A868}
+  .clock-note{font-size:11.5px;color:#8FA9A1;margin-top:2px}
+
+  /* ---------- 导航 ---------- */
+  .tabs{
+    background:var(--surface); border-bottom:1px solid var(--line);
+    position:sticky; top:0; z-index:20;
+  }
+  .tabs-in{display:flex;gap:0;overflow-x:auto;scrollbar-width:none}
+  .tabs-in::-webkit-scrollbar{display:none}
+  .tabs a{
+    display:block; padding:12px 16px; font-size:13.5px; color:var(--ink-2);
+    text-decoration:none; white-space:nowrap; border-bottom:2px solid transparent;
+    font-weight:520;
+  }
+  .tabs a:hover{color:var(--accent);background:var(--surface-2)}
+  .tabs a:focus-visible{outline:2px solid var(--accent);outline-offset:-3px}
+  .tabs a b{font-family:var(--font-mono);font-size:12px;color:var(--ink-3);font-weight:500;margin-right:6px}
+
+  /* ---------- 通用 ---------- */
+  section{padding:var(--sp-6) 0}
+  section + section{border-top:1px solid var(--line)}
+  h2{
+    font-size:clamp(17px,2vw,21px); font-weight:660; letter-spacing:-.005em;
+    margin:0 0 var(--sp-2); display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+  }
+  h2 .h2num{font-family:var(--font-mono);font-size:12px;color:var(--accent);font-weight:500;letter-spacing:.06em}
+  .lede{margin:0 0 var(--sp-4); color:var(--ink-2); font-size:14.5px; max-width:74ch}
+
+  /* ---------- 项目速览 ---------- */
+  .facts{
+    display:grid; gap:0;
+    grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+    border-top:1px solid var(--line-strong); border-left:1px solid var(--line-strong);
+    background:var(--surface);
+  }
+  .fact{
+    padding:12px 14px; border-right:1px solid var(--line); border-bottom:1px solid var(--line);
+    min-width:0;
+  }
+  .fact dt{font-size:11.5px;color:var(--ink-3);letter-spacing:.03em;margin:0 0 3px}
+  .fact dd{margin:0;font-size:14.5px;font-weight:600;line-height:1.45;overflow-wrap:anywhere}
+  .fact dd.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-weight:550}
+  .fact dd .u{font-weight:400;color:var(--ink-3);font-size:12.5px;margin-left:2px}
+  .fact.wide{grid-column:span 2}
+  .fact.alert{background:var(--warn-soft)}
+  .fact.alert dd{color:var(--warn)}
+
+  .callout{
+    margin-top:var(--sp-4); padding:13px 16px; background:var(--surface);
+    border-left:3px solid var(--accent); font-size:14px; color:var(--ink-2);
+  }
+  .callout strong{color:var(--ink)}
+  .callout.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+  .callout.risk{border-left-color:var(--risk);background:var(--risk-soft)}
+
+  /* ---------- 清单 ---------- */
+  .checkhead{
+    display:flex;flex-wrap:wrap;gap:var(--sp-4);align-items:center;justify-content:space-between;
+    margin-bottom:var(--sp-4);
+  }
+  .prog{display:flex;align-items:center;gap:12px;flex:1 1 300px;min-width:0}
+  .prog-bar{flex:1;height:9px;background:var(--line);border-radius:99px;overflow:hidden;min-width:80px}
+  .prog-fill{height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .3s cubic-bezier(.22,.7,.3,1)}
+  .prog-txt{font-family:var(--font-mono);font-size:13px;font-variant-numeric:tabular-nums;color:var(--ink-2);white-space:nowrap}
+  .prog-txt b{color:var(--accent);font-size:15px}
+  .btn-reset{
+    font:inherit;font-size:12.5px;padding:6px 12px;background:transparent;color:var(--ink-3);
+    border:1px solid var(--line-strong);border-radius:var(--radius);cursor:pointer;
+  }
+  .btn-reset:hover{color:var(--risk);border-color:var(--risk)}
+  .btn-reset:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  .grp{margin-bottom:var(--sp-4);background:var(--surface);border:1px solid var(--line)}
+  .grp-hd{
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    padding:11px 15px;background:var(--surface-2);border-bottom:1px solid var(--line);
+  }
+  .grp-hd h3{margin:0;font-size:14.5px;font-weight:640;letter-spacing:.005em}
+  .grp-hd .cnt{margin-left:auto;font-family:var(--font-mono);font-size:12.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+  .grp-hd .cnt.done{color:var(--accent);font-weight:600}
+  .grp-pill{
+    font-family:var(--font-mono);font-size:10.5px;letter-spacing:.06em;padding:2px 7px;
+    border-radius:2px;background:var(--accent-soft);color:var(--accent);font-weight:600;
+  }
+  .grp-pill.p0{background:var(--risk-soft);color:var(--risk)}
+
+  ul.cklist{list-style:none;margin:0;padding:0}
+  ul.cklist li{border-bottom:1px solid var(--line)}
+  ul.cklist li:last-child{border-bottom:none}
+  ul.cklist label{
+    display:flex;gap:11px;padding:11px 15px;cursor:pointer;align-items:flex-start;
+  }
+  ul.cklist label:hover{background:var(--surface-2)}
+  ul.cklist input[type=checkbox]{
+    appearance:none;-webkit-appearance:none;flex:0 0 auto;
+    width:17px;height:17px;margin:3px 0 0;border:1.5px solid var(--line-strong);
+    border-radius:2px;background:var(--surface);cursor:pointer;position:relative;
+  }
+  ul.cklist input[type=checkbox]:checked{background:var(--accent);border-color:var(--accent)}
+  ul.cklist input[type=checkbox]:checked::after{
+    content:"";position:absolute;left:5px;top:1px;width:4px;height:9px;
+    border:solid #fff;border-width:0 2px 2px 0;transform:rotate(42deg);
+  }
+  ul.cklist input[type=checkbox]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  ul.cklist input[type=checkbox]:checked ~ .ck-body .ck-title{color:var(--ink-3);text-decoration:line-through;text-decoration-thickness:1px}
+  .ck-body{min-width:0;flex:1}
+  .ck-title{display:block;font-size:14.5px;font-weight:560;line-height:1.45}
+  .ck-note{display:block;font-size:12.8px;color:var(--ink-3);line-height:1.55;margin-top:3px;overflow-wrap:anywhere}
+  .ck-note b{color:var(--ink-2);font-weight:600}
+  .tag{
+    display:inline-block;font-family:var(--font-mono);font-size:10px;font-style:normal;
+    letter-spacing:.05em;padding:1px 6px;border-radius:2px;margin-left:7px;
+    vertical-align:1px;font-weight:600;
+  }
+  .tag.hot{background:var(--risk);color:#fff}
+  .tag.must{background:var(--risk-soft);color:var(--risk)}
+  .tag.pts{background:var(--accent-soft);color:var(--accent)}
+  .tag.cash{background:var(--warn-soft);color:var(--warn)}
+
+  /* ---------- 评分自测 ---------- */
+  .score-grid{display:grid;gap:var(--sp-5);grid-template-columns:minmax(0,1fr)}
+  @media(min-width:1080px){
+    .score-grid{grid-template-columns:minmax(0,1.62fr) minmax(280px,.85fr);align-items:start}
+    .score-side{position:sticky;top:60px}
+  }
+  .score-table-wrap{background:var(--surface);border:1px solid var(--line);overflow-x:auto}
+  table.score{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
+  table.score caption{
+    text-align:left;padding:11px 15px;font-size:12.5px;color:var(--ink-3);
+    border-bottom:1px solid var(--line);background:var(--surface-2);
+  }
+  table.score th,table.score td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+  table.score thead th{
+    font-size:11.5px;letter-spacing:.05em;color:var(--ink-3);font-weight:600;
+    background:var(--surface-2);white-space:nowrap;
+  }
+  table.score tbody tr:last-child td{border-bottom:none}
+  table.score td.sec{
+    background:var(--surface-2);font-weight:640;font-size:13px;letter-spacing:.03em;
+    border-right:1px solid var(--line);white-space:nowrap;
+  }
+  table.score td.sec span{display:block;font-family:var(--font-mono);font-size:11px;color:var(--ink-3);font-weight:400}
+  table.score td.cap{font-family:var(--font-mono);font-size:12.5px;color:var(--ink-3);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+  table.score td.got{font-family:var(--font-mono);font-size:14.5px;font-weight:600;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--accent)}
+  table.score td.got.zero{color:var(--ink-3)}
+  table.score td.got.part{color:var(--warn)}
+  table.score input[type=number],table.score select{
+    font:inherit;font-family:var(--font-mono);font-size:13.5px;padding:5px 7px;
+    border:1px solid var(--line-strong);border-radius:2px;background:var(--surface);
+    color:var(--ink);width:100%;max-width:130px;font-variant-numeric:tabular-nums;
+  }
+  table.score select{font-family:var(--font-body);max-width:100%;width:100%;text-overflow:ellipsis}
+  .selstack{display:grid;gap:6px;max-width:560px}
+  table.score input:focus,table.score select:focus{outline:2px solid var(--accent);outline-offset:0;border-color:var(--accent)}
+  .inrow{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:12.5px;color:var(--ink-3)}
+  .inrow input{max-width:96px}
+
+  .total-box{background:var(--surface);border:1px solid var(--line);padding:var(--sp-4)}
+  .total-num{
+    font-family:var(--font-mono);font-size:clamp(38px,6vw,54px);font-weight:600;line-height:1;
+    font-variant-numeric:tabular-nums;color:var(--accent);letter-spacing:-.02em;
+  }
+  .total-num .dec{font-size:.55em;color:var(--ink-3)}
+  .total-sub{font-size:12.5px;color:var(--ink-3);margin-top:5px}
+  .total-bar{height:10px;background:var(--line);border-radius:99px;overflow:hidden;margin:var(--sp-3) 0 var(--sp-2)}
+  .total-fill{height:100%;width:0;background:var(--accent);transition:width .3s cubic-bezier(.22,.7,.3,1)}
+  .breakdown{list-style:none;margin:var(--sp-3) 0 0;padding:0;font-size:13px}
+  .breakdown li{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px dotted var(--line)}
+  .breakdown li:last-child{border-bottom:none}
+  .breakdown .k{color:var(--ink-2)}
+  .breakdown .v{font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-weight:600}
+  .hint{
+    margin-top:var(--sp-3);padding:10px 12px;font-size:12.8px;line-height:1.55;
+    background:var(--warn-soft);color:var(--warn);border-left:3px solid var(--warn);
+  }
+  .hint.ok{background:var(--accent-soft);color:var(--accent);border-left-color:var(--accent)}
+  .hint.risk{background:var(--risk-soft);color:var(--risk);border-left-color:var(--risk)}
+  .hint ul{margin:5px 0 0;padding-left:16px}
+  .hint li{margin:2px 0}
+
+  /* ---------- 页脚 ---------- */
+  footer{
+    padding:var(--sp-5) 0 var(--sp-6); border-top:1px solid var(--line-strong);
+    font-size:12.5px; color:var(--ink-3); line-height:1.65;
+  }
+  footer p{margin:0 0 6px}
+  footer .src{font-family:var(--font-mono);font-size:11.5px}
+
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+  @media print{
+    body{background:#fff;font-size:10.5pt;color:#000}
+    .masthead{background:#fff;color:#000;border-bottom:2px solid #000;padding:0 0 8pt}
+    .masthead h1{color:#000;font-size:16pt}
+    .eyebrow,.clock-note,.mast-sub{color:#333}
+    .clock{border-left:none;padding-left:0;gap:16pt}
+    .clock-label{color:#333}
+    .clock-val{color:#000;font-size:14pt}
+    .clock-val.hot{color:#000}
+    .tabs{display:none}
+    section{padding:12pt 0;break-inside:auto}
+    .grp{break-inside:avoid;border:1px solid #999}
+    .grp-hd{background:#f0f0f0}
+    ul.cklist li{break-inside:avoid}
+    ul.cklist input[type=checkbox]{border-color:#333}
+    ul.cklist input[type=checkbox]:checked{background:#333}
+    .score-side{position:static}
+    .total-num{font-size:22pt;color:#000}
+    .callout,.hint{background:#f4f4f4 !important;color:#000 !important;border-left:3px solid #333}
+    table.score{min-width:0;font-size:9.5pt}
+    table.score-wrap{overflow:visible}
+    a[href^="http"]::after{content:" (" attr(href) ")";font-size:8pt;color:#555}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important;animation:none !important}
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="mast-top">
+      <div class="mast-id">
+        <p class="eyebrow">Bid Control Sheet · 01包 · 二次招标</p>
+        <h1>北京宣传文化引导基金委托结项验收（咨询服务）投标自查台</h1>
+        <p class="mast-sub">
+          项目编号 <b>11000026210200185724-XM001</b> · 代理编号 <b>JAXD2026-BJSZ-09059</b> ·
+          采购人 <b>北京市宣传思想文化人才发展中心</b> · 代理 <b>北京建安信达招标代理有限公司</b>
+        </p>
+      </div>
+      <div class="clock">
+        <div class="clock-item">
+          <p class="clock-label">距投标截止</p>
+          <div class="clock-val hot" id="daysLeft">—</div>
+          <p class="clock-note">11-11 09:00 远程开标</p>
+        </div>
+        <div class="clock-item">
+          <p class="clock-label">距文件获取截止</p>
+          <div class="clock-val" id="daysGet">—</div>
+          <p class="clock-note">10-28 17:00 过期无法投标</p>
+        </div>
+        <div class="clock-item">
+          <p class="clock-label">清单完成度</p>
+          <div class="clock-val" id="clockProg">0<small>%</small></div>
+          <p class="clock-note">共 41 项核对点</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="页面导航">
+  <div class="wrap">
+    <div class="tabs-in">
+      <a href="#brief"><b>01</b>项目速览</a>
+      <a href="#check"><b>02</b>投标自查清单</a>
+      <a href="#score"><b>03</b>评分自测表</a>
+      <a href="#traps"><b>04</b>三个隐形失分点</a>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <!-- ============ 01 项目速览 ============ -->
+  <section id="brief">
+    <h2><span class="h2num">01</span>项目速览</h2>
+    <p class="lede">下列数字全部来自招标文件正文与《投标人须知资料表》。资料表与正文冲突时以资料表为准。</p>
+
+    <dl class="facts">
+      <div class="fact">
+        <dt>01包预算 = 最高限价</dt>
+        <dd class="mono">215<span class="u">万元</span></dd>
+      </div>
+      <div class="fact">
+        <dt>项目总预算</dt>
+        <dd class="mono">448<span class="u">万元</span></dd>
+      </div>
+      <div class="fact">
+        <dt>投标保证金</dt>
+        <dd class="mono">40,000<span class="u">元</span></dd>
+      </div>
+      <div class="fact">
+        <dt>投标有效期</dt>
+        <dd class="mono">90<span class="u">日历天</span></dd>
+      </div>
+      <div class="fact">
+        <dt>服务期</dt>
+        <dd>合同签订起 1 年</dd>
+      </div>
+      <div class="fact">
+        <dt>结项验收项目量</dt>
+        <dd class="mono">≥290<span class="u">个 / 年</span></dd>
+      </div>
+      <div class="fact alert">
+        <dt>每项目收入（倒推）</dt>
+        <dd class="mono">7,414<span class="u">元 / 个</span></dd>
+      </div>
+      <div class="fact">
+        <dt>中标人代理服务费</dt>
+        <dd class="mono">≈2.42<span class="u">万元</span></dd>
+      </div>
+      <div class="fact wide">
+        <dt>评分权重</dt>
+        <dd>技术 75 分 · 商务 15 分 · 价格 10 分</dd>
+      </div>
+      <div class="fact">
+        <dt>联合体 / 分包</dt>
+        <dd>均不允许</dd>
+      </div>
+      <div class="fact">
+        <dt>异常低价红线</dt>
+        <dd class="mono">96.75<span class="u">万元</span></dd>
+      </div>
+      <div class="fact">
+        <dt>解密时限</dt>
+        <dd class="mono">30<span class="u">分钟</span></dd>
+      </div>
+    </dl>
+
+    <div class="callout warn">
+      <strong>报价策略要点：</strong>价格分满分只有 10 分，按「最低价 ÷ 我方报价 × 10」计算。基准价 190 万时，报 195 万得 9.74 分、报 215 万得 8.84 分——<strong>多让 20 万只换来 0.91 分</strong>。而技术方案五个子项整体掉一档最多丢 37 分。报价应贴近上限，把资源投在方案上。
+    </div>
+  </section>
+
+  <!-- ============ 02 自查清单 ============ -->
+  <section id="check">
+    <h2><span class="h2num">02</span>投标自查清单</h2>
+    <p class="lede">41 个核对点，按「不做就出局 → 做了才得分 → 签了才安全」的顺序排列。勾选状态自动保存在本机浏览器。</p>
+
+    <div class="checkhead">
+      <div class="prog">
+        <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+        <span class="prog-txt"><b id="progDone">0</b> / 41 项</span>
+      </div>
+      <button type="button" class="btn-reset" id="btnReset">清空全部勾选</button>
+    </div>
+
+    <!-- A -->
+    <div class="grp" data-grp="A">
+      <div class="grp-hd">
+        <span class="grp-pill p0">P0 最紧急</span>
+        <h3>A · 时间与平台</h3>
+        <span class="cnt"><span class="c">0</span>/7</span>
+      </div>
+      <ul class="cklist">
+        <li><label>
+          <input type="checkbox" data-k="a1">
+          <span class="ck-body">
+            <span class="ck-title">在平台按包下载招标文件<em class="tag hot">明天截止</em></span>
+            <span class="ck-note">获取期 <b>2026-10-22 至 10-28</b>。登录北京市政府采购电子交易平台，在【我的项目】选择对应采购包，分别下载电子版。未在期限内按上述操作获取文件的包，<b>无法提交相应包的电子投标文件</b>。（第一章 三；第三章 资格审查第 5 项）</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="a2">
+          <span class="ck-body">
+            <span class="ck-title">核验 CA 数字证书或电子营业执照有效</span>
+            <span class="ck-note">CA 服务热线 010-58511086；电子营业执照热线 400-699-7000；平台技术支持 010-86483801。开标当日需用同一证书解密，证书过期或信息不符会直接卡死流程。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="a3">
+          <span class="ck-body">
+            <span class="ck-title">完成平台市场主体注册入库</span>
+            <span class="ck-note">「用户指南」—「操作指南」—「市场主体注册入库操作流程指引」，自助注册绑定。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="a4">
+          <span class="ck-body">
+            <span class="ck-title">安装驱动与投标文件编制工具</span>
+            <span class="ck-note">平台「工具下载」下载招标采购系统文件驱动安装包与投标文件编制工具客户端。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="a5">
+          <span class="ck-body">
+            <span class="ck-title">测试电子签章与加密流程</span>
+            <span class="ck-note">电子投标文件需<b>加密并加盖电子签章</b>。建议先用测试文件跑通一次签章 + 加密 + 解密全流程，不要等到 11-11 早上第一次操作。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="a6">
+          <span class="ck-body">
+            <span class="ck-title">11-11 前完成电子投标文件加密上传</span>
+            <span class="ck-note">截止 <b>2026-11-11 09:00</b>（北京时间）。不接受纸质文件，无须到场。上传时保持网络畅通，建议提前至少 24 小时完成上传，留出补传窗口。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="a7">
+          <span class="ck-body">
+            <span class="ck-title">开标当日安排专人在线解密<em class="tag must">30分钟</em></span>
+            <span class="ck-note">解密时间 <b>30 分钟</b>，投标人自行对电子投标文件解密。超时未解密按未提交处理。安排 2 人同时在线，一人操作一人盯时间。</span>
+          </span>
+        </label></li>
+      </ul>
+    </div>
+
+    <!-- B -->
+    <div class="grp" data-grp="B">
+      <div class="grp-hd">
+        <span class="grp-pill p0">资格</span>
+        <h3>B · 资格证明文件</h3>
+        <span class="cnt"><span class="c">0</span>/7</span>
+      </div>
+      <ul class="cklist">
+        <li><label>
+          <input type="checkbox" data-k="b1">
+          <span class="ck-body">
+            <span class="ck-title">营业执照电子件（或事业单位法人证书 / 执业许可证）</span>
+            <span class="ck-note">提供证明文件的电子件或电子证照。分支机构投标需同时提供所属法人出具的授权书（加盖法人公章）。任一资格项不符，资格审查不合格、投标无效。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="b2">
+          <span class="ck-body">
+            <span class="ck-title">《投标人资格声明书》<em class="tag must">实质性格式</em></span>
+            <span class="ck-note">七项承诺逐条核对，<b>不得删减、不得改含义、不得留空</b>。第（七）项须填报与本单位存在「单位负责人为同一人或直接控股、管理关系」的其他法人单位——没有也要写「无」。承诺不实按提供虚假材料谋取中标处理（政府采购法第七十七条）。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="b3">
+          <span class="ck-body">
+            <span class="ck-title">信用记录自查（代理机构会查，你必须先自查）</span>
+            <span class="ck-note">渠道：信用中国 www.creditchina.gov.cn、中国政府采购网 www.ccgp.gov.cn。查询时点：<b>投标截止时间之后</b>。被列入失信被执行人、重大税收违法案件当事人名单、政府采购严重违法失信行为记录名单的，<b>投标无效</b>。今天先自查一遍，有异常立即处理。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="b4">
+          <span class="ck-body">
+            <span class="ck-title">投标保证金 4 万元在截止前到账<em class="tag cash">资金</em></span>
+            <span class="ck-note">账户名称：北京建安信达招标代理有限公司；开户行：中国民生银行股份有限公司北京朝阳门支行；账号 <b>632643601</b>。到账（保函提交）截止时间<b>同投标截止时间</b>。可接受支票、汇票、本票、网银支付或金融机构/担保机构保函等非现金形式。未按要求缴纳，<b>投标无效</b>。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="b5">
+          <span class="ck-body">
+            <span class="ck-title">保证金凭证电子件准备两份</span>
+            <span class="ck-note">一是放进投标文件内，二是在投标截止前通过电子交易平台单独上传「投标保证金凭证/交款单据电子件」。<b>两处都要有</b>。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="b6">
+          <span class="ck-body">
+            <span class="ck-title">排查关联公司是否同时投本包<em class="tag must">易误伤</em></span>
+            <span class="ck-note">串通投标情形包括：不同投标人的投标文件由同一单位或个人编制、委托同一单位或个人办理投标事宜、项目管理成员或联系人为同一人、文件异常一致或报价呈规律性差异、文件相互混装、<b>投标保证金从同一单位或个人的账户转出</b>。集团内两家公司同时投同一包，几乎必踩其中一条。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="b7">
+          <span class="ck-body">
+            <span class="ck-title">确认资格审查合格家数是否够 3 家</span>
+            <span class="ck-note">资格审查合格的投标人<b>不足 3 家不进行评标</b>；对招标文件作实质响应的供应商不足 3 家应予废标。本项目为二次招标，说明第一次未凑够 3 家——这一条是真实存在的风险。</span>
+          </span>
+        </label></li>
+      </ul>
+    </div>
+
+    <!-- C -->
+    <div class="grp" data-grp="C">
+      <div class="grp-hd">
+        <span class="grp-pill p0">格式</span>
+        <h3>C · 商务技术文件 · 六份实质性格式</h3>
+        <span class="cnt"><span class="c">0</span>/6</span>
+      </div>
+      <ul class="cklist">
+        <li><label>
+          <input type="checkbox" data-k="c1">
+          <span class="ck-body">
+            <span class="ck-title">投标书</span>
+            <span class="ck-note">模板内已印死投标有效期 <b>90 个日历日</b>，不得改。第 2 条「其他补充条款」若无内容填「无」。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="c2">
+          <span class="ck-body">
+            <span class="ck-title">授权委托书</span>
+            <span class="ck-note">法定代表人签字或授权代表签字 + 加盖公章，被授权人身份证件齐全。符合性审查第 1 项就是它。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="c3">
+          <span class="ck-body">
+            <span class="ck-title">开标一览表</span>
+            <span class="ck-note">报价以<b>单独递交的开标一览表</b>为准。大小写金额必须一致，不一致时以大写为准——建议大写小写都由同一人复核。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="c4">
+          <span class="ck-body">
+            <span class="ck-title">投标分项报价表</span>
+            <span class="ck-note">分项汇总必须等于开标一览表总价。分项有缺漏视为已含在其他各项报价中，<b>不对总价调整</b>；现场被要求确认而不确认的，视为拆分投标、投标无效。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="c5">
+          <span class="ck-body">
+            <span class="ck-title">合同条款偏离表</span>
+            <span class="ck-note">无偏离也要填「无偏离」并盖章，不能空表。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="c6">
+          <span class="ck-body">
+            <span class="ck-title">采购需求偏离表</span>
+            <span class="ck-note">对照第五章逐条响应。第五章未见 ★ 号条款，但定稿前务必再核一遍全文是否有 ★。</span>
+          </span>
+        </label></li>
+      </ul>
+    </div>
+
+    <!-- D -->
+    <div class="grp" data-grp="D">
+      <div class="grp-hd">
+        <span class="grp-pill">得分</span>
+        <h3>D · 评分证据材料（90 分靠这里）</h3>
+        <span class="cnt"><span class="c">0</span>/10</span>
+      </div>
+      <ul class="cklist">
+        <li><label>
+          <input type="checkbox" data-k="d1">
+          <span class="ck-body">
+            <span class="ck-title">凑齐 5 份 2022 年 1 月起的类似合同<em class="tag pts">15 分</em></span>
+            <span class="ck-note">类型：类似<b>评审、绩效管理、结项审计、管理咨询服务、调研分析</b>。每份 3 分，封顶 15 分。<b>必须提供合同复印件并加盖公章</b>，且复印件需能反映：合同名称、合同工作内容、签约双方名称、双方签字及盖章、签约日期。缺任何一项视为不符合要求，不得分。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="d2">
+          <span class="ck-body">
+            <span class="ck-title">团队 9 人名单与分工说明<em class="tag pts">15 分</em></span>
+            <span class="ck-note">采购需求要求总人数不少于 8 人（负责人 1 + 咨询≥2 + 项目团队≥5），但评分表要求<b>不含负责人</b>也要 8 人。要拿满团队数量分，实际需配 <b>1 + 8 = 9 人</b>。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="d3">
+          <span class="ck-body">
+            <span class="ck-title">分工覆盖三块内容</span>
+            <span class="ck-note">咨询服务（工作流程梳理、绩效指标体系完善、绩效管理）、调查研究（各类调查统计分析报告）、结项验收服务（过程监督管理、监督管理台账、结项归档材料整理）。三块均具备且均有类似项目执行经验得 5 分，每有一项不满足扣 2 分。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="d4">
+          <span class="ck-body">
+            <span class="ck-title">5 个有效证书（中级经济师及以上 / PMP）<em class="tag pts">5 分</em></span>
+            <span class="ck-note">不含项目负责人。每人 1 分，封顶 5 分。同一人不同资格证书可累计，<b>同一类证书不同等级不累计</b>。提供资格证书扫描件需加盖投标人公章。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="d5">
+          <span class="ck-body">
+            <span class="ck-title">项目实施方案<em class="tag pts">15 分</em></span>
+            <span class="ck-note">四档：15 / 10 / 5 / 0。评价口径是「先进、科学、合理、完整，完全符合项目需要」。必须正面回应 290 个项目的<b>标准化交付体系</b>，不能写成通用咨询方案。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="d6">
+          <span class="ck-body">
+            <span class="ck-title">质量保障方案<em class="tag pts">15 分</em></span>
+            <span class="ck-note">必须包含四块：项目实施团队架构、项目实施过程控制方案、安全管理体系与保障、项目风险控制管理方案。缺块直接掉档。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="d7">
+          <span class="ck-body">
+            <span class="ck-title">项目进度方案<em class="tag pts">10 分</em></span>
+            <span class="ck-note">三档：10 / 5 / 0。评分明确要求「<b>完成情况表清晰明了</b>」——光有文字描述没有表，容易只拿 5 分。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="d8">
+          <span class="ck-body">
+            <span class="ck-title">应急预案<em class="tag pts">10 分</em></span>
+            <span class="ck-note">四档：10 / 7 / 3 / 0。前提条件：<b>核心技术人员须提供 7×24 小时联系方式并保证渠道畅通</b>，方案里要附联系方式表。缺少这个前提，内容再全也会掉档。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="d9">
+          <span class="ck-body">
+            <span class="ck-title">服务承诺<em class="tag pts">10 分</em></span>
+            <span class="ck-note">三档：10 / 5 / 0。评价口径是「内容全面、表述清晰、针对性强」。逐条对应第五章七项委托内容 + 满意度跟踪来写，比笼统表态有效。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="d10">
+          <span class="ck-body">
+            <span class="ck-title">满意度调查专项方案</span>
+            <span class="ck-note">《调查问卷》《调查方案（含调查范围）》《进度计划》三份须报采购人批准后方可实施；完成后提交《引导基金满意度调查报告》正式文本 1 份，含不少于 <b>3 项</b>可操作性优化建议。这是验收标准，也是方案加分点。</span>
+          </span>
+        </label></li>
+      </ul>
+    </div>
+
+    <!-- E -->
+    <div class="grp" data-grp="E">
+      <div class="grp-hd">
+        <span class="grp-pill p0">红线</span>
+        <h3>E · 报价与合规红线</h3>
+        <span class="cnt"><span class="c">0</span>/7</span>
+      </div>
+      <ul class="cklist">
+        <li><label>
+          <input type="checkbox" data-k="e1">
+          <span class="ck-body">
+            <span class="ck-title">报价不超过 215 万元</span>
+            <span class="ck-note">超过采购包预算金额或最高限价的，符合性审查不通过、投标无效。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="e2">
+          <span class="ck-body">
+            <span class="ck-title">报价唯一，无可选择或可调整报价</span>
+            <span class="ck-note">出现「XX 万至 XX 万」「视情况另议」等表述直接无效。资料表已明确「投标报价特殊规定：无」。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="e3">
+          <span class="ck-body">
+            <span class="ck-title">未拆分采购包投标</span>
+            <span class="ck-note">必须对 01 包第五章全部内容整体投标。分项报价缺漏且现场不确认的，视为拆分投标。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="e4">
+          <span class="ck-body">
+            <span class="ck-title">不以联合体形式投标、不计划分包</span>
+            <span class="ck-note">本项目不接受联合体；非主体非关键性工作也不允许分包。方案里不要写「拟将档案整理外包」这类表述。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="e5">
+          <span class="ck-body">
+            <span class="ck-title">报价不低于 96.75 万元，或备好成本测算说明<em class="tag must">异常低价</em></span>
+            <span class="ck-note">触发异常低价审查的四条：低于通过符合性审查供应商报价平均值的 50%；低于次低报价的 50%；<b>低于最高限价 45%（即 96.75 万）</b>；评审委员会专业判断认为过低。触发后须在现场合理时间内（一般不少于 30 分钟）提交成本测算等书面说明，证明不了合理性即作<b>无效投标</b>。若预计报第 3 条情形，可随投标文件一并提交说明，现场不再重复提交。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="e6">
+          <span class="ck-body">
+            <span class="ck-title">报价已包含全部税费与费用</span>
+            <span class="ck-note">报价须含为完成本项目发生的一切费用和税费，采购人不再支付报价外任何费用。同时预留代理服务费约 2.42 万（服务类差额累进：100 万以下 1.5% + 100–500 万段 0.8%），领取中标通知书时一次性缴纳。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="e7">
+          <span class="ck-body">
+            <span class="ck-title">全文检查是否含采购人不能接受的附加条件</span>
+            <span class="ck-note">例如「付款逾期则暂停服务」「按实际工作量另行结算」等，属符合性审查第 15 项，可直接判无效。</span>
+          </span>
+        </label></li>
+      </ul>
+    </div>
+
+    <!-- F -->
+    <div class="grp" data-grp="F">
+      <div class="grp-hd">
+        <span class="grp-pill">履约</span>
+        <h3>F · 合同与履约准备</h3>
+        <span class="cnt"><span class="c">0</span>/4</span>
+      </div>
+      <ul class="cklist">
+        <li><label>
+          <input type="checkbox" data-k="f1">
+          <span class="ck-body">
+            <span class="ck-title">接受 50% / 20% / 30% 付款节奏</span>
+            <span class="ck-note">签约后凭发票 15 日内付 50%；<b>2027 年 6–7 月</b>付 20%；全部验收完成后付剩余 30%。且「支付需以相应财政资金实际拨付至甲方账户为前提，因财政资金未及时到账导致的延期支付，不属于违约行为」。现金流按尾款跨年准备。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="f2">
+          <span class="ck-body">
+            <span class="ck-title">接受「两次验收不合格即解约」的违约条款<em class="tag must">重大</em></span>
+            <span class="ck-note">成果未通过验收需限期重做并赔偿全部损失；<b>第二次提交仍不合格，或未在合理期限内提交，甲方有权解除合同、乙方返还全部已付款、并赔偿全部直接损失、间接损失及诉讼仲裁费、律师费、公证费、调查费、差旅费</b>。这是全篇风险最高的条款，方案里的质量保障体系要能兜住它。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="f3">
+          <span class="ck-body">
+            <span class="ck-title">接受通州法院管辖与保密条款独立性</span>
+            <span class="ck-note">争议向甲方所在地（通州）人民法院起诉。保密义务不因合同无效、解除、终止而免除；未经甲方书面同意不得向第三方透露合同内容、项目策划及实施方案。不得转让合同权利义务。</span>
+          </span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" data-k="f4">
+          <span class="ck-body">
+            <span class="ck-title">确认履约保证金实际未设</span>
+            <span class="ck-note">资料表未列履约保证金条款，投标书模板中「提交履约保证金」是示范文本套话。无需准备，但若被问及按「招标文件未要求」答复。</span>
+          </span>
+        </label></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ 03 评分自测 ============ -->
+  <section id="score">
+    <h2><span class="h2num">03</span>评分自测表</h2>
+    <p class="lede">按第四章《评标标准》原样建模，改数字即时重算。价格分需先填一个你预计的最低价作为基准价。<strong>当前填的是一家中等水平投标人的示例值（合计 65.84 分），请逐项改成你的实际情况。</strong></p>
+
+    <div class="score-grid">
+      <div class="score-table-wrap">
+        <table class="score">
+          <caption>综合评分法 · 满分 100 分。分值计算保留两位小数，第三位四舍五入。</caption>
+          <thead>
+            <tr>
+              <th scope="col">评审因素</th>
+              <th scope="col">计分要素与我的情况</th>
+              <th scope="col" style="text-align:right">满分</th>
+              <th scope="col" style="text-align:right">得分</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="sec" rowspan="1">价格部分<span>10 分</span></td>
+              <td>
+                <div class="inrow">
+                  我方报价 <input type="number" id="bidPrice" value="215" min="0" max="215" step="1" aria-label="我方报价，单位万元"> 万
+                  <span aria-hidden="true">／</span>
+                  预计最低价 <input type="number" id="minPrice" value="190" min="0" step="1" aria-label="预计最低价，单位万元"> 万
+                </div>
+              </td>
+              <td class="cap">10</td>
+              <td class="got" id="sPrice">—</td>
+            </tr>
+
+            <tr>
+              <td class="sec" rowspan="1">商务部分<span>15 分</span></td>
+              <td>
+                <div class="inrow">
+                  有效业绩合同 <input type="number" id="perfCount" value="3" min="0" max="20" step="1" aria-label="有效业绩合同份数"> 份
+                  <span>（每份 3 分，封顶 15）</span>
+                </div>
+              </td>
+              <td class="cap">15</td>
+              <td class="got" id="sPerf">—</td>
+            </tr>
+
+            <tr>
+              <td class="sec" rowspan="6">技术部分<span>75 分</span></td>
+              <td>
+                <div class="inrow">
+                  团队分工满足项数
+                  <select id="teamSplit" aria-label="团队分工满足项数">
+                    <option value="3" selected>三项全满足（咨询 + 调研 + 结项验收）</option>
+                    <option value="2">缺 1 项</option>
+                    <option value="1">缺 2 项</option>
+                    <option value="0">缺 3 项</option>
+                  </select>
+                </div>
+              </td>
+              <td class="cap">5</td>
+              <td class="got" id="sSplit">—</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="inrow">
+                  团队成员人数（不含负责人） <input type="number" id="teamSize" value="6" min="0" max="30" step="1" aria-label="团队成员人数不含负责人"> 人
+                  <span>（8 人满分，每少 1 人扣 1）</span>
+                </div>
+              </td>
+              <td class="cap">5</td>
+              <td class="got" id="sSize">—</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="inrow">
+                  持证人数（中级经济师+ / PMP） <input type="number" id="certCount" value="3" min="0" max="20" step="1" aria-label="持证人数"> 人
+                  <span>（每人 1 分，封顶 5）</span>
+                </div>
+              </td>
+              <td class="cap">5</td>
+              <td class="got" id="sCert">—</td>
+            </tr>
+            <tr>
+              <td>
+                <select id="planImpl" aria-label="项目实施方案档位">
+                  <option value="15">项目实施方案 · 先进科学合理完整，完全符合需要</option>
+                  <option value="10" selected>项目实施方案 · 较为先进科学合理，基本符合</option>
+                  <option value="5">项目实施方案 · 与项目需要符合度低</option>
+                  <option value="0">项目实施方案 · 未提供或不符合要求</option>
+                </select>
+              </td>
+              <td class="cap">15</td>
+              <td class="got" id="sImpl">—</td>
+            </tr>
+            <tr>
+              <td>
+                <select id="planQa" aria-label="质量保障方案档位">
+                  <option value="15">质量保障方案 · 全面可行，符合采购需求</option>
+                  <option value="10" selected>质量保障方案 · 较全面较可行，基本符合</option>
+                  <option value="5">质量保障方案 · 部分可行、部分符合</option>
+                  <option value="0">质量保障方案 · 不可行或重大偏差或未提供</option>
+                </select>
+              </td>
+              <td class="cap">15</td>
+              <td class="got" id="sQa">—</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="selstack">
+                  <select id="planSch" aria-label="项目进度方案档位">
+                    <option value="10">进度方案 · 规划可行，完成情况表清晰</option>
+                    <option value="5" selected>进度方案 · 可行性一般，清晰性不强</option>
+                    <option value="0">进度方案 · 不明确或无法提供</option>
+                  </select>
+                  <select id="planEmg" aria-label="应急预案档位">
+                    <option value="10">应急预案 · 响应迅速，完全符合，详细完整</option>
+                    <option value="7" selected>应急预案 · 响应较慢，可操作性较差</option>
+                    <option value="3">应急预案 · 响应慢，操作性差，内容欠缺</option>
+                    <option value="0">应急预案 · 未提供</option>
+                  </select>
+                  <select id="planPro" aria-label="服务承诺档位">
+                    <option value="10">服务承诺 · 全面清晰，针对性强</option>
+                    <option value="5" selected>服务承诺 · 不够全面，针对性不强</option>
+                    <option value="0">服务承诺 · 无实质性或未提供</option>
+                  </select>
+                </div>
+              </td>
+              <td class="cap">30</td>
+              <td class="got" id="sPlan">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <aside class="score-side">
+        <div class="total-box">
+          <p class="total-sub" style="margin:0 0 4px">模拟总分</p>
+          <div class="total-num"><span id="totalNum">0</span><span class="dec" id="totalDec">.00</span></div>
+          <p class="total-sub">满分 100 分</p>
+          <div class="total-bar"><div class="total-fill" id="totalFill"></div></div>
+          <ul class="breakdown">
+            <li><span class="k">价格</span><span class="v" id="bPrice">—</span></li>
+            <li><span class="k">业绩</span><span class="v" id="bPerf">—</span></li>
+            <li><span class="k">团队人员</span><span class="v" id="bTeam">—</span></li>
+            <li><span class="k">五个方案子项</span><span class="v" id="bPlan">—</span></li>
+          </ul>
+          <div class="hint" id="hintBox">调整上方数值查看提示。</div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ============ 04 三个隐形失分点 ============ -->
+  <section id="traps">
+    <h2><span class="h2num">04</span>三个隐形失分点</h2>
+    <p class="lede">这三条不在显眼位置，但每一条都能让你在开标前就少 3–5 分。</p>
+
+    <div class="callout risk">
+      <strong>① 团队人数口径不一致。</strong>第五章要求「团队总人数不少于 8 人（含项目负责人 1 名 + 咨询≥2 + 项目团队≥5）」，评分表却写「团队成员配备（<strong>不包含项目负责人</strong>）为 8 人得 5 分，每少一人扣 1 分」。按采购需求最低配 8 人（含负责人），团队数量项只能得 4 分。要拿满必须配 <strong>9 人</strong>。
+    </div>
+    <div class="callout warn">
+      <strong>② 业绩合同复印件的形式要求。</strong>15 分是全部评分项里最容易拿满、也最容易全丢的一项。要求「合同复印件并加盖公章」，且必须能反映合同名称、合同工作内容、签约双方名称、双方签字及盖章、签约日期。只扫描首页尾页、或章盖在空白处、或缺少签约日期页，都按「不符合要求」计 0 分。现在就去档案室把这 5 份合同的完整页找出来。
+    </div>
+    <div class="callout">
+      <strong>③ 应急预案有个隐藏前提。</strong>评分写的是「服务期间，供应商核心技术人员须提供 <strong>7×24 小时联系方式，并保证联系渠道畅通</strong>：1、对突发事件响应迅速……得 10 分」。也就是说，方案里没有 7×24 联系方式表，即使应急流程写得再完整，评审也可以把「响应迅速」判为不成立而降到 7 分档。
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>本清单依据《北京市政府采购项目公开招标文件》——北京宣传文化引导基金管理服务采购项目 01 包（项目编号 11000026210200185724-XM001，代理编号 JAXD2026-BJSZ-09059）逐条提取，涵盖第一章投标邀请、第二章投标人须知及资料表、第三章资格审查、第四章评标程序评标方法和评标标准、第五章采购需求、第六章合同文本、第七章投标文件格式。</p>
+    <p class="src">提取自用户提供的招标文件 PDF（72 页，metadata 标题「政府采购示范文本（2023）」）。招标文件为唯一权威依据；本页仅作操作辅助，如与招标文件原文不一致，以招标文件为准。</p>
+<p class="src"><a href="https://maomao8412.github.io/bj-fund-tender-toolkit/" target="_blank" rel="noopener noreferrer">← 返回投标工具首页</a></p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  try{
+    var STORE_KEY = "bid_checklist_20261027_v1";
+    var boxes = Array.prototype.slice.call(document.querySelectorAll('ul.cklist input[type=checkbox]'));
+    var groups = Array.prototype.slice.call(document.querySelectorAll('.grp'));
+
+    /* ---------- 倒计时 ---------- */
+    function setClock(){
+      var deadline = new Date('2026-11-11T09:00:00+08:00');
+      var getFile = new Date('2026-10-28T17:00:00+08:00');
+      var now = new Date();
+      var dLeft = Math.ceil((deadline - now) / 86400000);
+      var gLeft = Math.ceil((getFile - now) / 86400000);
+      var elD = document.getElementById('daysLeft');
+      var elG = document.getElementById('daysGet');
+      if(elD){
+        if(dLeft > 0){ elD.innerHTML = dLeft + '<small>天</small>'; }
+        else { elD.innerHTML = '已截止'; elD.classList.remove('hot'); }
+      }
+      if(elG){
+        if(gLeft > 0){ elG.innerHTML = gLeft + '<small>天</small>'; elG.classList.add('hot'); }
+        else { elG.innerHTML = '已截止'; elG.classList.add('hot'); }
+      }
+    }
+    setClock();
+
+    /* ---------- 勾选进度 ---------- */
+    function save(){
+      try{
+        var state = {};
+        boxes.forEach(function(b){ if(b.checked) state[b.dataset.k] = 1; });
+        localStorage.setItem(STORE_KEY, JSON.stringify(state));
+      }catch(e){ /* 静默降级 */ }
+    }
+    function load(){
+      try{
+        var raw = localStorage.getItem(STORE_KEY);
+        if(!raw) return;
+        var state = JSON.parse(raw) || {};
+        boxes.forEach(function(b){ if(state[b.dataset.k]) b.checked = true; });
+      }catch(e){ /* 静默降级 */ }
+    }
+    function refresh(){
+      var done = 0;
+      boxes.forEach(function(b){ if(b.checked) done++; });
+      var total = boxes.length || 1;
+      var pct = Math.round(done / total * 100);
+      var fill = document.getElementById('progFill');
+      var dtxt = document.getElementById('progDone');
+      var ctxt = document.getElementById('clockProg');
+      if(fill) fill.style.width = pct + '%';
+      if(dtxt) dtxt.textContent = done;
+      if(ctxt) ctxt.innerHTML = pct + '<small>%</small>';
+
+      groups.forEach(function(g){
+        var bs = g.querySelectorAll('input[type=checkbox]');
+        var c = 0;
+        Array.prototype.forEach.call(bs, function(b){ if(b.checked) c++; });
+        var cnt = g.querySelector('.cnt');
+        if(cnt){
+          cnt.querySelector('.c').textContent = c;
+          cnt.classList.toggle('done', c === bs.length);
+        }
+      });
+    }
+    boxes.forEach(function(b){
+      b.addEventListener('change', function(){ refresh(); save(); });
+    });
+    var btn = document.getElementById('btnReset');
+    if(btn){
+      btn.addEventListener('click', function(){
+        boxes.forEach(function(b){ b.checked = false; });
+        try{ localStorage.removeItem(STORE_KEY); }catch(e){}
+        refresh();
+      });
+    }
+    load();
+    refresh();
+
+    /* ---------- 页内导航 ---------- */
+    Array.prototype.forEach.call(document.querySelectorAll('.tabs a[href^="#"]'), function(a){
+      a.addEventListener('click', function(ev){
+        var id = a.getAttribute('href').slice(1);
+        var target = document.getElementById(id);
+        if(target){
+          ev.preventDefault();
+          target.scrollIntoView({behavior:'smooth', block:'start'});
+        }
+      });
+    });
+
+    /* ---------- 评分自测 ---------- */
+    function num(id, dflt){
+      var el = document.getElementById(id);
+      if(!el) return dflt;
+      var v = parseFloat(el.value);
+      return isNaN(v) ? dflt : v;
+    }
+    function sel(id, dflt){
+      var el = document.getElementById(id);
+      if(!el) return dflt;
+      var v = parseFloat(el.value);
+      return isNaN(v) ? dflt : v;
+    }
+    function cls(id, val, cap){
+      var el = document.getElementById(id);
+      if(!el) return;
+      el.classList.remove('zero','part');
+      if(val <= 0.001) el.classList.add('zero');
+      else if(val < cap - 0.001) el.classList.add('part');
+    }
+
+    function calc(){
+      var bid = num('bidPrice', 215);
+      var minP = num('minPrice', 190);
+      var perf = num('perfCount', 0);
+      var splitN = sel('teamSplit', 3);
+      var sizeN = num('teamSize', 0);
+      var certN = num('certCount', 0);
+      var impl = sel('planImpl', 0);
+      var qa = sel('planQa', 0);
+      var sch = sel('planSch', 0);
+      var emg = sel('planEmg', 0);
+      var pro = sel('planPro', 0);
+
+      /* 价格分：基准价 = 最低价；若我方为最低价则满分 */
+      var priceScore = 0;
+      if(bid > 0){
+        var base = Math.min(minP, bid);
+        priceScore = Math.min(base / bid * 10, 10);
+        if(priceScore < 0) priceScore = 0;
+      }
+
+      /* 业绩：每份 3 分封顶 15 */
+      var perfScore = Math.min(perf * 3, 15);
+
+      /* 团队：分工 5 - 2*(3-n)，地板 0 */
+      var splitScore = Math.max(5 - 2 * (3 - splitN), 0);
+      /* 人数：8 人满分，每少 1 人扣 1 */
+      var sizeScore = Math.max(5 - Math.max(0, 8 - sizeN), 0);
+      if(sizeScore > 5) sizeScore = 5;
+      /* 证书：每人 1 分封顶 5 */
+      var certScore = Math.min(certN, 5);
+
+      var planScore = impl + qa + sch + emg + pro;
+      var teamScore = splitScore + sizeScore + certScore;
+
+      var total = priceScore + perfScore + teamScore + planScore;
+
+      document.getElementById('sPrice').textContent = priceScore.toFixed(2);
+      document.getElementById('sPerf').textContent = perfScore.toFixed(2);
+      document.getElementById('sSplit').textContent = splitScore.toFixed(2);
+      document.getElementById('sSize').textContent = sizeScore.toFixed(2);
+      document.getElementById('sCert').textContent = certScore.toFixed(2);
+      document.getElementById('sImpl').textContent = impl.toFixed(2);
+      document.getElementById('sQa').textContent = qa.toFixed(2);
+      var planRest = sch + emg + pro;
+      document.getElementById('sPlan').textContent = planRest.toFixed(2);
+
+      cls('sPrice', priceScore, 10);
+      cls('sPerf', perfScore, 15);
+      cls('sSplit', splitScore, 5);
+      cls('sSize', sizeScore, 5);
+      cls('sCert', certScore, 5);
+      cls('sImpl', impl, 15);
+      cls('sQa', qa, 15);
+      cls('sPlan', planRest, 30);
+
+      var whole = Math.floor(total);
+      var frac = Math.round((total - whole) * 100);
+      if(frac === 100){ whole += 1; frac = 0; }
+      document.getElementById('totalNum').textContent = whole;
+      document.getElementById('totalDec').textContent = '.' + (frac < 10 ? '0' + frac : frac);
+      document.getElementById('totalFill').style.width = Math.min(total, 100) + '%';
+
+      document.getElementById('bPrice').textContent = priceScore.toFixed(2);
+      document.getElementById('bPerf').textContent = perfScore.toFixed(2);
+      document.getElementById('bTeam').textContent = teamScore.toFixed(2);
+      document.getElementById('bPlan').textContent = planScore.toFixed(2);
+
+      /* 提示 */
+      var hints = [];
+      var box = document.getElementById('hintBox');
+      box.classList.remove('ok','risk');
+
+      if(bid > 215){
+        hints.push('报价 ' + bid + ' 万已超过 215 万最高限价，符合性审查直接不通过，投标无效。');
+        box.classList.add('risk');
+      }
+      if(bid > 0 && bid < 96.75){
+        hints.push('报价低于 96.75 万（限价 45%），必然触发异常低价审查，须现场提交成本测算说明。');
+        box.classList.add('risk');
+      }
+      if(minP > 0 && bid > 0 && minP > bid){
+        hints.push('预计最低价高于我方报价，说明我方可能是最低价——已按满分计。');
+      }
+      if(perf < 5){
+        hints.push('业绩只拿 ' + perfScore.toFixed(0) + ' 分，少 ' + (5 - perf) + ' 份合同就少 ' + ((5 - perf) * 3) + ' 分，这是最容易补的分。');
+      }
+      if(sizeN < 8){
+        hints.push('团队人数（不含负责人）只有 ' + sizeN + ' 人，团队数量项丢 ' + (8 - sizeN) + ' 分。补齐到 8 人即可拿满。');
+      }
+      if(certN < 5){
+        hints.push('持证人数 ' + certN + ' 人，证书项丢 ' + (5 - Math.min(certN, 5)) + ' 分。');
+      }
+      if(impl < 15 || qa < 15){
+        hints.push('实施方案与质量保障方案各 15 分，是单笔最大分差来源，任一掉到次档即丢 5 分。');
+      }
+      if(hints.length === 0){
+        hints.push('当前配置已接近满分。注意：实际开标价未知，价格分是唯一无法完全自主控制的项。');
+        box.classList.add('ok');
+      }
+      box.innerHTML = '<ul><li>' + hints.join('</li><li>') + '</li></ul>';
+    }
+
+    var ids = ['bidPrice','minPrice','perfCount','teamSplit','teamSize','certCount',
+               'planImpl','planQa','planSch','planEmg','planPro'];
+    ids.forEach(function(id){
+      var el = document.getElementById(id);
+      if(el){
+        el.addEventListener('input', calc);
+        el.addEventListener('change', calc);
+      }
+    });
+    calc();
+
+  }catch(err){
+    /* 脚本失败时静态内容仍完整可读 */
+    if(window.console && console.warn) console.warn('interactive layer unavailable:', err);
+  }
+})();
+</script>
+</body>
+</html>

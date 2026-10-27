@@ -1,0 +1,800 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>成本倒推模型 · 215万上限价下的利润空间测算</title>
+<style>
+  :root{
+    --canvas:#F6F5F1;
+    --surface:#FFFFFF;
+    --surface-2:#FAF9F5;
+    --ink:#1B2320;
+    --ink-2:#4A5651;
+    --ink-3:#7C8883;
+    --line:#DCD9D1;
+    --line-strong:#BFBBB0;
+    --accent:#0E6B58;
+    --accent-soft:#E3EFEA;
+    --warn:#A9650D;
+    --warn-soft:#F8EEDC;
+    --risk:#9E2B25;
+    --risk-soft:#F8E6E4;
+    --g1:#0E6B58;
+    --g2:#3E8F79;
+    --g3:#78B49C;
+    --g4:#AECFBD;
+    --radius:3px;
+    --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:18px; --sp-5:26px; --sp-6:38px; --sp-7:56px;
+    --font-body:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    --font-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--canvas);color:var(--ink);
+    font-family:var(--font-body);font-size:15.5px;line-height:1.62;overflow-x:hidden;
+  }
+  .wrap{width:100%;max-width:1500px;margin:0 auto;padding:0 clamp(14px,3.2vw,44px)}
+
+  /* ---------- 顶部 ---------- */
+  .masthead{background:var(--ink);color:#EDEBE4;padding:var(--sp-5) 0 var(--sp-5);border-bottom:3px solid var(--accent)}
+  .eyebrow{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#8FA9A1;margin:0 0 var(--sp-2)}
+  h1{font-size:clamp(20px,2.5vw,28px);line-height:1.28;letter-spacing:-.01em;margin:0 0 var(--sp-2);font-weight:680;color:#fff}
+  .mast-sub{margin:0;font-size:13.5px;color:#A9B6B1;line-height:1.55;max-width:96ch}
+  .mast-sub b{color:#D9DFDB;font-weight:600}
+
+  /* 结论带 */
+  .verdict{
+    display:grid;gap:0;margin-top:var(--sp-5);
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    border-top:1px solid #3A443F;
+  }
+  .vcell{padding:14px 16px 4px;border-right:1px solid #3A443F;min-width:0}
+  .vcell:last-child{border-right:none}
+  .vlabel{font-size:11.5px;letter-spacing:.06em;color:#8FA9A1;margin:0 0 4px;font-family:var(--font-mono)}
+  .vval{font-family:var(--font-mono);font-size:clamp(26px,3.6vw,36px);font-weight:600;line-height:1.05;font-variant-numeric:tabular-nums;letter-spacing:-.02em;color:#fff}
+  .vval small{font-size:.45em;font-weight:400;color:#A9B6B1;margin-left:3px;letter-spacing:0}
+  .vval.pos{color:#7FCBAB}
+  .vval.neg{color:#E88B7E}
+  .vval.mid{color:#F0C070}
+  .vnote{font-size:11.5px;color:#8FA9A1;margin:3px 0 0}
+
+  /* ---------- 主体 ---------- */
+  main{padding:var(--sp-6) 0}
+  section + section{margin-top:var(--sp-6);padding-top:var(--sp-6);border-top:1px solid var(--line)}
+  h2{font-size:clamp(17px,2vw,21px);font-weight:660;margin:0 0 var(--sp-2);display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  h2 .h2num{font-family:var(--font-mono);font-size:12px;color:var(--accent);font-weight:500;letter-spacing:.06em}
+  .lede{margin:0 0 var(--sp-4);color:var(--ink-2);font-size:14.5px;max-width:78ch}
+
+  /* 布局 */
+  .split{display:grid;gap:var(--sp-5);grid-template-columns:minmax(0,1fr)}
+  @media(min-width:1060px){
+    .split{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);align-items:start}
+  }
+
+  /* ---------- 参数面板 ---------- */
+  .panel{background:var(--surface);border:1px solid var(--line)}
+  .panel-hd{padding:10px 14px;background:var(--surface-2);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .panel-hd h3{margin:0;font-size:14px;font-weight:640}
+  .panel-hd .badge{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.05em;padding:2px 7px;border-radius:2px;font-weight:600}
+  .badge.fixed{background:var(--accent-soft);color:var(--accent)}
+  .badge.assume{background:var(--warn-soft);color:var(--warn)}
+  .panel-body{padding:var(--sp-3) 14px var(--sp-4)}
+
+  .fgroup{margin-bottom:var(--sp-4)}
+  .fgroup:last-child{margin-bottom:0}
+  .fgroup-t{
+    font-size:11.5px;letter-spacing:.08em;color:var(--ink-3);font-family:var(--font-mono);
+    margin:0 0 8px;padding-bottom:5px;border-bottom:1px dotted var(--line-strong);
+  }
+  .frow{
+    display:grid;grid-template-columns:minmax(0,1fr) 96px 44px;
+    gap:8px;align-items:center;padding:5px 0;font-size:13.5px;
+  }
+  .frow label{color:var(--ink-2);min-width:0;overflow-wrap:anywhere}
+  .frow input[type=number]{
+    font:inherit;font-family:var(--font-mono);font-size:13.5px;padding:4px 7px;width:100%;
+    border:1px solid var(--line-strong);border-radius:2px;background:var(--surface);
+    color:var(--ink);text-align:right;font-variant-numeric:tabular-nums;
+  }
+  .frow input[type=number]:focus{outline:2px solid var(--accent);outline-offset:0;border-color:var(--accent)}
+  .frow .unit{font-size:12px;color:var(--ink-3);font-family:var(--font-mono)}
+
+  /* ---------- 结果 ---------- */
+  .result{background:var(--surface);border:1px solid var(--line)}
+  .rrow{display:flex;justify-content:space-between;gap:12px;padding:8px 14px;border-bottom:1px solid var(--line);font-size:13.8px}
+  .rrow:last-child{border-bottom:none}
+  .rrow .k{color:var(--ink-2);min-width:0}
+  .rrow .k em{font-style:normal;font-family:var(--font-mono);font-size:11px;color:var(--ink-3);margin-left:5px}
+  .rrow .v{font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
+  .rrow.sum{background:var(--surface-2);font-weight:640}
+  .rrow.sum .v{font-size:15.5px}
+  .rrow.profit .v.pos{color:var(--accent)}
+  .rrow.profit .v.neg{color:var(--risk)}
+  .rrow.profit{background:var(--accent-soft)}
+  .rrow.profit.loss{background:var(--risk-soft)}
+
+  /* 成本条 */
+  .barwrap{padding:var(--sp-4) 14px}
+  .bar{display:flex;height:26px;border-radius:2px;overflow:hidden;background:var(--line)}
+  .seg{height:100%;position:relative}
+  .seg:first-child{border-radius:2px 0 0 2px}
+  .seg:last-child{border-radius:0 2px 2px 0}
+  .legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:10px;font-size:12px;color:var(--ink-2)}
+  .legend span{display:inline-flex;align-items:center;gap:5px}
+  .legend i{width:9px;height:9px;border-radius:1px;display:inline-block;flex:0 0 auto}
+
+  /* ---------- 情景矩阵 ---------- */
+  .matrix-wrap{background:var(--surface);border:1px solid var(--line);overflow-x:auto}
+  table.matrix{width:100%;border-collapse:collapse;font-size:13.5px;min-width:600px}
+  table.matrix caption{text-align:left;padding:10px 14px;font-size:12.5px;color:var(--ink-3);border-bottom:1px solid var(--line);background:var(--surface-2)}
+  table.matrix th,table.matrix td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:center;font-variant-numeric:tabular-nums}
+  table.matrix thead th{font-size:11.5px;letter-spacing:.05em;color:var(--ink-3);font-weight:600;background:var(--surface-2);white-space:nowrap}
+  table.matrix tbody th{
+    text-align:left;font-weight:600;font-size:13px;background:var(--surface-2);
+    white-space:nowrap;border-right:1px solid var(--line);
+  }
+  table.matrix tbody th span{display:block;font-family:var(--font-mono);font-size:11px;color:var(--ink-3);font-weight:400}
+  table.matrix tbody tr:last-child th,table.matrix tbody tr:last-child td{border-bottom:none}
+  table.matrix td{font-family:var(--font-mono);font-weight:600}
+  td.c-ok{background:#DCEFE6;color:#0B5745}
+  td.c-fine{background:#EDF6F0;color:#2F7A61}
+  td.c-thin{background:#FBF2DF;color:#8A5410}
+  td.c-bad{background:#F9E7E5;color:#8E2620}
+  td.c-na{background:var(--surface-2);color:var(--ink-3);font-weight:400}
+  .mnote{margin-top:10px;font-size:12.5px;color:var(--ink-3);line-height:1.6}
+
+  /* ---------- 换算 ---------- */
+  .kpis{
+    display:grid;gap:0;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+    border-top:1px solid var(--line-strong);border-left:1px solid var(--line-strong);background:var(--surface);
+  }
+  .kpi{padding:12px 14px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-width:0}
+  .kpi dt{font-size:11.5px;color:var(--ink-3);margin:0 0 3px;letter-spacing:.03em}
+  .kpi dd{margin:0;font-family:var(--font-mono);font-size:20px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.2}
+  .kpi dd small{font-size:11.5px;font-weight:400;color:var(--ink-3);margin-left:3px}
+  .kpi dd.hot{color:var(--warn)}
+  .kpi dd.cold{color:var(--risk)}
+
+  .callout{margin-top:var(--sp-4);padding:13px 16px;background:var(--surface);border-left:3px solid var(--accent);font-size:14px;color:var(--ink-2);line-height:1.65}
+  .callout strong{color:var(--ink)}
+  .callout.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+  .callout.risk{border-left-color:var(--risk);background:var(--risk-soft)}
+  .callout + .callout{margin-top:10px}
+
+  /* ---------- 假设表 ---------- */
+  .tblwrap{background:var(--surface);border:1px solid var(--line);overflow-x:auto}
+  table.assume{width:100%;border-collapse:collapse;font-size:13.5px;min-width:520px}
+  table.assume caption{text-align:left;padding:10px 14px;font-size:12.5px;color:var(--ink-3);border-bottom:1px solid var(--line);background:var(--surface-2)}
+  table.assume th,table.assume td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+  table.assume thead th{font-size:11.5px;letter-spacing:.05em;color:var(--ink-3);font-weight:600;background:var(--surface-2);white-space:nowrap}
+  table.assume tbody tr:last-child td{border-bottom:none}
+  table.assume td.mono{font-family:var(--font-mono);font-size:12.5px;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .src-hard{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.04em;padding:1px 6px;border-radius:2px;background:var(--accent-soft);color:var(--accent);font-weight:600;white-space:nowrap}
+  .src-soft{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.04em;padding:1px 6px;border-radius:2px;background:var(--warn-soft);color:var(--warn);font-weight:600;white-space:nowrap}
+
+  footer{padding:var(--sp-5) 0 var(--sp-6);border-top:1px solid var(--line-strong);font-size:12.5px;color:var(--ink-3);line-height:1.65}
+  footer p{margin:0 0 6px}
+  footer .src{font-family:var(--font-mono);font-size:11.5px}
+
+  @media print{
+    body{background:#fff;font-size:10pt;color:#000}
+    .masthead{background:#fff;color:#000;border-bottom:2px solid #000;padding:0 0 10pt}
+    .masthead h1{color:#000;font-size:16pt}
+    .eyebrow,.mast-sub,.vnote{color:#333}
+    .verdict{border-top:1px solid #999}
+    .vcell{border-right:1px solid #ccc}
+    .vlabel{color:#333}
+    .vval{color:#000;font-size:18pt}
+    .vval.pos,.vval.neg,.vval.mid{color:#000}
+    .split{grid-template-columns:1fr}
+    .panel,.result,.matrix-wrap,.tblwrap{break-inside:avoid;border:1px solid #999}
+    table.matrix,table.assume{min-width:0;font-size:8.5pt}
+    td.c-ok,td.c-fine,td.c-thin,td.c-bad{background:#f0f0f0 !important;color:#000 !important}
+    .callout{background:#f4f4f4 !important;color:#000 !important;border-left:3px solid #333}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important}}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="eyebrow">Cost Back-Calculation · 01包 · 215 万上限价</p>
+    <h1>215 万封顶价下，这个项目能赚多少</h1>
+    <p class="mast-sub">
+      290 个结项验收项目、8 人以上团队、一年服务期——把招标文件的硬约束压进一个可调的成本模型。
+      <b>结论先行：利润天花板在 14% 左右，报价必须贴近上限，人力必须压在 5–6 人年。</b>
+    </p>
+
+    <div class="verdict">
+      <div class="vcell">
+        <p class="vlabel">当前利润率</p>
+        <div class="vval pos" id="vRate">—</div>
+        <p class="vnote">利润 ÷ 不含税收入</p>
+      </div>
+      <div class="vcell">
+        <p class="vlabel">利润额</p>
+        <div class="vval" id="vProfit">—</div>
+        <p class="vnote">扣除全部成本与增值税</p>
+      </div>
+      <div class="vcell">
+        <p class="vlabel">盈亏平衡报价</p>
+        <div class="vval" id="vBe">—</div>
+        <p class="vnote">低于此价即亏损</p>
+      </div>
+      <div class="vcell">
+        <p class="vlabel">单项目收入</p>
+        <div class="vval" id="vUnit">—</div>
+        <p class="vnote">290 个项目摊薄</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ======== 参数 + 结果 ======== -->
+  <section id="calc">
+    <h2><span class="h2num">01</span>参数与测算</h2>
+    <p class="lede">绿色标记项来自招标文件原文，橙色标记项是我的估算假设——请用你公司的真实数据覆盖它。任何一项改动都会即时重算。</p>
+
+    <div class="split">
+      <!-- 参数 -->
+      <div>
+        <div class="panel">
+          <div class="panel-hd">
+            <h3>报价与人力</h3>
+            <span class="badge assume">可调</span>
+          </div>
+          <div class="panel-body">
+            <div class="fgroup">
+              <p class="fgroup-t">报价</p>
+              <div class="frow">
+                <label for="pPrice">投标报价（含税，上限 215）</label>
+                <input type="number" id="pPrice" value="215" min="0" max="215" step="1">
+                <span class="unit">万元</span>
+              </div>
+              <div class="frow">
+                <label for="pVat">增值税率（现代服务业一般纳税人）</label>
+                <input type="number" id="pVat" value="6" min="0" max="20" step="0.5">
+                <span class="unit">%</span>
+              </div>
+            </div>
+
+            <div class="fgroup">
+              <p class="fgroup-t">人力投入（人年 × 综合年成本）</p>
+              <div class="frow">
+                <label for="pFteLead">项目负责人 · 投入</label>
+                <input type="number" id="pFteLead" value="0.5" min="0" max="5" step="0.1">
+                <span class="unit">人年</span>
+              </div>
+              <div class="frow">
+                <label for="pCostLead">项目负责人 · 综合年成本</label>
+                <input type="number" id="pCostLead" value="40" min="0" step="1">
+                <span class="unit">万/人年</span>
+              </div>
+              <div class="frow">
+                <label for="pFteCons">咨询团队 · 投入</label>
+                <input type="number" id="pFteCons" value="1.5" min="0" max="10" step="0.1">
+                <span class="unit">人年</span>
+              </div>
+              <div class="frow">
+                <label for="pCostCons">咨询团队 · 综合年成本</label>
+                <input type="number" id="pCostCons" value="28" min="0" step="1">
+                <span class="unit">万/人年</span>
+              </div>
+              <div class="frow">
+                <label for="pFteExec">项目执行 · 投入</label>
+                <input type="number" id="pFteExec" value="3.5" min="0" max="20" step="0.1">
+                <span class="unit">人年</span>
+              </div>
+              <div class="frow">
+                <label for="pCostExec">项目执行 · 综合年成本</label>
+                <input type="number" id="pCostExec" value="18" min="0" step="1">
+                <span class="unit">万/人年</span>
+              </div>
+            </div>
+
+            <div class="fgroup">
+              <p class="fgroup-t">其他直接成本</p>
+              <div class="frow">
+                <label for="pProj">结项验收项目数</label>
+                <input type="number" id="pProj" value="290" min="1" step="10">
+                <span class="unit">个</span>
+              </div>
+              <div class="frow">
+                <label for="pVisitRate">需实地踏勘比例</label>
+                <input type="number" id="pVisitRate" value="20" min="0" max="100" step="5">
+                <span class="unit">%</span>
+              </div>
+              <div class="frow">
+                <label for="pVisitCost">单次踏勘成本（交通+人工）</label>
+                <input type="number" id="pVisitCost" value="800" min="0" step="100">
+                <span class="unit">元</span>
+              </div>
+              <div class="frow">
+                <label for="pMeetN">监督评审会议次数</label>
+                <input type="number" id="pMeetN" value="12" min="0" step="1">
+                <span class="unit">次</span>
+              </div>
+              <div class="frow">
+                <label for="pMeetCost">单次会议成本</label>
+                <input type="number" id="pMeetCost" value="1" min="0" step="0.1">
+                <span class="unit">万元</span>
+              </div>
+              <div class="frow">
+                <label for="pRepCost">单份报告打印装订归档</label>
+                <input type="number" id="pRepCost" value="150" min="0" step="10">
+                <span class="unit">元</span>
+              </div>
+              <div class="frow">
+                <label for="pTool">台账系统与模板库</label>
+                <input type="number" id="pTool" value="3" min="0" step="0.5">
+                <span class="unit">万元</span>
+              </div>
+              <div class="frow">
+                <label for="pSurvey">满意度调查专项</label>
+                <input type="number" id="pSurvey" value="3" min="0" step="0.5">
+                <span class="unit">万元</span>
+              </div>
+              <div class="frow">
+                <label for="pCont">不可预见费</label>
+                <input type="number" id="pCont" value="3" min="0" step="0.5">
+                <span class="unit">万元</span>
+              </div>
+            </div>
+
+            <div class="fgroup">
+              <p class="fgroup-t">公司与管理</p>
+              <div class="frow">
+                <label for="pMgmt">管理费摊销（按不含税收入）</label>
+                <input type="number" id="pMgmt" value="8" min="0" max="40" step="0.5">
+                <span class="unit">%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 结果 -->
+      <div>
+        <div class="result">
+          <div class="rrow"><span class="k">报价（含税）</span><span class="v" id="rPrice">—</span></div>
+          <div class="rrow"><span class="k">不含税收入</span><span class="v" id="rNet">—</span></div>
+          <div class="rrow"><span class="k">增值税<em>销项</em></span><span class="v" id="rVat">—</span></div>
+          <div class="rrow"><span class="k">人力成本<em id="rFteNote">—</em></span><span class="v" id="rHr">—</span></div>
+          <div class="rrow"><span class="k">代理服务费<em>差额累进</em></span><span class="v" id="rFee">—</span></div>
+          <div class="rrow"><span class="k">踏勘与会议</span><span class="v" id="rField">—</span></div>
+          <div class="rrow"><span class="k">报告与档案</span><span class="v" id="rArchive">—</span></div>
+          <div class="rrow"><span class="k">系统与调查</span><span class="v" id="rSys">—</span></div>
+          <div class="rrow"><span class="k">管理费摊销</span><span class="v" id="rMgmt">—</span></div>
+          <div class="rrow"><span class="k">不可预见费</span><span class="v" id="rCont">—</span></div>
+          <div class="rrow sum"><span class="k">成本合计</span><span class="v" id="rCost">—</span></div>
+          <div class="rrow profit" id="rProfitRow"><span class="k">利润（税前）</span><span class="v" id="rProfit">—</span></div>
+          <div class="rrow"><span class="k">利润率</span><span class="v" id="rRate">—</span></div>
+        </div>
+
+        <div class="panel" style="margin-top:var(--sp-3)">
+          <div class="panel-hd"><h3>成本构成</h3><span class="badge fixed">占比</span></div>
+          <div class="barwrap">
+            <div class="bar" id="costBar" role="img" aria-label="成本构成占比条形图"></div>
+            <div class="legend" id="costLegend"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== 情景矩阵 ======== -->
+  <section id="matrix">
+    <h2><span class="h2num">02</span>情景矩阵：人力配置 × 报价</h2>
+    <p class="lede">横轴是报价档位，纵轴是三种人力配置。数字是利润率。同一行内看「多报 20 万值不值」，同一列内看「人力失控的代价」。</p>
+
+    <div class="matrix-wrap">
+      <table class="matrix">
+        <caption>利润率 =（不含税收入 − 全部成本）÷ 不含税收入。其余参数沿用上方当前设置。</caption>
+        <thead>
+          <tr>
+            <th scope="col">人力配置</th>
+            <th scope="col">195 万</th>
+            <th scope="col">200 万</th>
+            <th scope="col">205 万</th>
+            <th scope="col">210 万</th>
+            <th scope="col">215 万</th>
+          </tr>
+        </thead>
+        <tbody id="matrixBody"></tbody>
+      </table>
+    </div>
+    <p class="mnote">
+      A 档 = 0.5 / 1.5 / 3.5 人年（合计 5.5）；B 档 = 0.8 / 2.2 / 4.5（合计 7.5）；C 档 = 1 / 2 / 6（合计 9，即按招标「8 人团队 + 1 名负责人」全部全职投入）。
+      三档的差别不在人数，而在<strong>实际投入工时</strong>——招标要求配 8 人团队，并不等于这 8 人要全职做这个项目。
+    </p>
+  </section>
+
+  <!-- ======== 关键换算 ======== -->
+  <section id="kpi">
+    <h2><span class="h2num">03</span>四个必须记住的换算</h2>
+    <p class="lede">这四组数字决定这个项目在商业上成不成立。</p>
+
+    <dl class="kpis">
+      <div class="kpi">
+        <dt>单项目收入</dt>
+        <dd id="kUnit">—<small>元/个</small></dd>
+      </div>
+      <div class="kpi">
+        <dt>单项目人力预算工时</dt>
+        <dd id="kHours">—<small>小时/个</small></dd>
+        <dd class="sub" id="kHoursNote">按加权人年成本折算的工时上限</dd>
+      </div>
+      <div class="kpi">
+        <dt>人均年产值</dt>
+        <dd id="kPerCap">—<small>万元/人年</small></dd>
+      </div>
+      <div class="kpi">
+        <dt>每人每年报告数</dt>
+        <dd id="kRepPer">—<small>份/人年</small></dd>
+      </div>
+    </dl>
+
+    <div class="callout warn">
+      <strong>把 7414 元/个项目拆开看。</strong>扣掉代理费、管理费、税费、会议、踏勘、档案这些非人力成本（约 1677 元/项目），落到人力上的预算是 <strong>5317 元/项目</strong>。按加权人年成本 22.7 万元、年工时 1700 小时折算，相当于每个项目<strong>最多 40 小时</strong>；而 5.5 人年实际只能给到 <strong>32 小时</strong>——这 32 小时还要分摊 12 次监督评审会议、绩效指标体系设计、业务流程体系梳理、满意度调查、档案整理和日常协调。
+      <br><br>
+      反推下来：<strong>常规项目的结项验收报告必须压到 12–16 小时/份</strong>，才能留出 15–18 小时给 20% 的问题项目做实地踏勘、约谈和专项报告。这意味着必须有一套标准化报告模板 + 台账系统做支撑。如果每个项目都按定制化咨询做，7414 元覆盖不了。
+    </div>
+    <div class="callout">
+      <strong>5.5 人年是这个项目的可行下限，不是宽裕配置。</strong>按上面的分层交付测算，290 个项目约消耗 5000 小时报告工时，加会议、指标体系、满意度调查、档案、协调约 2000 小时，合计约 4.2 人年——5.5 人年的余量只有 1.3 人年左右。这份余量就是全部利润空间：任何范围蔓延（比如采购人临时追加踏勘批次、要求每个项目都开评审会）都会直接吃掉利润。
+    </div>
+    <div class="callout">
+      <strong>这也正是技术方案能拿分的点。</strong>第五章要求「每个项目需提供结项验收报告或成果验收报告或阶段性验收报告」，同时要台账、要踏勘、要评审会议、要绩效指标体系、要满意度调查。把「分层交付」讲清楚——常规项目走标准模板批量出报告，问题项目走实地踏勘 + 约谈 + 专项报告——既是成本模型成立的前提，也正好对上「项目实施方案 15 分」和「质量保障方案 15 分」的评价口径。
+    </div>
+  </section>
+
+  <!-- ======== 结论 ======== -->
+  <section id="conclusion">
+    <h2><span class="h2num">04</span>三条硬结论</h2>
+
+    <div class="callout risk">
+      <strong>① 利润天花板约 14%，不可能更高。</strong>在 215 万上限价、5.5 人年投入的配置下，利润率是 14.4%。要让利润率达到 15%，报价需要 <strong>216.6 万</strong>——已经超过最高限价。也就是说，这个项目的合理报价区间只有 205–215 万，报低了纯属让利。
+    </div>
+    <div class="callout risk">
+      <strong>② 按「8 人全职」的思路做，必亏 20 万以上。</strong>招标要求团队总人数不少于 8 人、评分要求不含负责人也要 8 人，但这 8 人是<strong>配置人数</strong>，不是全职工时。若真按 7.5 人年投入，215 万报价下亏损 20.4 万；按 9 人年全投入，亏损 49.8 万。投标时必须明确「配置 9 人、实际投入 5–6 人年」的用工结构，否则中标即亏损。
+    </div>
+    <div class="callout warn">
+      <strong>③ 报价从 195 万提到 215 万，只损失 0.91 分价格分，多拿 20 万收入。</strong>价格分满分 10 分，公式是「基准价 ÷ 我方报价 × 10」。基准价 190 万时，195 万得 9.74 分、215 万得 8.84 分。用 0.91 分换 20 万营收，在任何技术方案能拉开 5 分以上差距的项目里都是明确划算的。所以：<strong>不要打价格战，把报价打满。</strong>
+    </div>
+  </section>
+
+  <!-- ======== 假设与来源 ======== -->
+  <section id="assumptions">
+    <h2><span class="h2num">05</span>数据来源与假设</h2>
+    <p class="lede">模型里每一个数字都能追溯到来源或明确标注为假设。替换假设值前，请确认你的实际情况。</p>
+
+    <div class="tblwrap">
+      <table class="assume">
+        <caption>硬数据来自招标文件，假设项需按公司实际替换。</caption>
+        <thead>
+          <tr>
+            <th scope="col">参数</th>
+            <th scope="col">取值</th>
+            <th scope="col">性质</th>
+            <th scope="col">依据 / 说明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>01包预算 = 最高限价</td>
+            <td class="mono">215 万元</td>
+            <td><span class="src-hard">招标文件</span></td>
+            <td>第一章「01 包预算金额：215 万元」；符合性审查要求报价不得超过预算金额或最高限价。</td>
+          </tr>
+          <tr>
+            <td>结项验收项目数</td>
+            <td class="mono">≥290 个</td>
+            <td><span class="src-hard">招标文件</span></td>
+            <td>第五章（一）第 1 条：结项、验收、跟踪项目数量不少于 290 个，每个项目需提供结项验收报告或成果验收报告或阶段性验收报告。</td>
+          </tr>
+          <tr>
+            <td>代理服务费</td>
+            <td class="mono">差额累进</td>
+            <td><span class="src-hard">招标文件</span></td>
+            <td>资料表第 27 条附招标代理服务收费标准，服务招标：100 万以下 1.5%、100–500 万 0.8%、500–1000 万 0.45%，由中标人承担，领取中标通知书时一次性缴纳。215 万中标约 2.42 万元。</td>
+          </tr>
+          <tr>
+            <td>付款节奏</td>
+            <td class="mono">50% / 20% / 30%</td>
+            <td><span class="src-hard">招标文件</span></td>
+            <td>第六章第五条：签约后 15 日内付 50%，2027 年 6–7 月付 20%，全部验收完成后付剩余。且以财政资金实际拨付为前提，延期支付不属违约。</td>
+          </tr>
+          <tr>
+            <td>团队配置要求</td>
+            <td class="mono">1 + 8 人</td>
+            <td><span class="src-hard">招标文件</span></td>
+            <td>第五章要求总人数不少于 8 人（负责人 1 + 咨询≥2 + 项目团队≥5）；第四章评分表要求不含负责人 8 人得满分。取较严口径。</td>
+          </tr>
+          <tr>
+            <td>增值税率</td>
+            <td class="mono">6%</td>
+            <td><span class="src-soft">假设</span></td>
+            <td>按现代服务业一般纳税人 6% 计算。若为小规模纳税人、或适用差额征税、或享受减免，请调整。</td>
+          </tr>
+          <tr>
+            <td>综合年成本 · 负责人 / 咨询 / 执行</td>
+            <td class="mono">40 / 28 / 18 万元</td>
+            <td><span class="src-soft">假设</span></td>
+            <td>指企业侧综合用工成本（含工资、社保公积金、福利、办公摊销），非到手薪资。北京地区咨询审计类岗位的常见区间，必须用你公司实际数据替换。</td>
+          </tr>
+          <tr>
+            <td>实际投入人年</td>
+            <td class="mono">5.5 人年</td>
+            <td><span class="src-soft">假设</span></td>
+            <td>按 290 份报告 × 平均工时 + 台账、踏勘、会议、档案、满意度调查的配套工作量倒推。这是全模型最敏感的参数。</td>
+          </tr>
+          <tr>
+            <td>实地踏勘比例</td>
+            <td class="mono">20%</td>
+            <td><span class="src-soft">假设</span></td>
+            <td>招标文件要求「按季度推进问题项目及常规性项目的踏勘跟踪」，未给出具体比例。按问题项目 + 抽样常规项目合计 20% 估算。</td>
+          </tr>
+          <tr>
+            <td>监督评审会议</td>
+            <td class="mono">12 次 × 1 万元</td>
+            <td><span class="src-soft">假设</span></td>
+            <td>招标文件要求「定期组织召开项目监督评审会议」，未明确频次。按月度 12 次、每次含场地物料与专家费 1 万元估算。</td>
+          </tr>
+          <tr>
+            <td>管理费摊销</td>
+            <td class="mono">8%</td>
+            <td><span class="src-soft">假设</span></td>
+            <td>按不含税收入计提，覆盖公司层面管理、财务、行政、投标等共同成本。</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <strong>模型边界。</strong>本模型只测算<strong>项目级直接经济性</strong>，未计入：投标阶段的方案编制人力与标书制作成本、中标后可能的验收返工成本、财政资金延迟到账的资金占用成本、以及「两次验收不合格即解约并返还全款」这一违约条款的风险敞口。若把这几项按 5% 计提，14.4% 的利润率实际落到 9% 左右。
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>本模型依据《北京市政府采购项目公开招标文件》——北京宣传文化引导基金管理服务采购项目 01 包（项目编号 11000026210200185724-XM001，代理编号 JAXD2026-BJSZ-09059）测算，硬数据来自第一章投标邀请、第二章投标人须知资料表、第四章评标标准、第五章采购需求、第六章合同文本。</p>
+    <p class="src">提取自用户提供的招标文件 PDF（72 页）。假设项已逐条标注，招标文件为唯一权威依据。</p>
+<p class="src"><a href="https://maomao8412.github.io/bj-fund-tender-toolkit/" target="_blank" rel="noopener noreferrer">← 返回投标工具首页</a></p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  try{
+    function v(id, dflt){
+      var el = document.getElementById(id);
+      if(!el) return dflt;
+      var n = parseFloat(el.value);
+      return isNaN(n) ? dflt : n;
+    }
+    function fmt(n, d){
+      if(d === undefined) d = 2;
+      return n.toLocaleString('zh-CN', {minimumFractionDigits:d, maximumFractionDigits:d});
+    }
+    /* 代理服务费：服务招标差额累进 */
+    function agencyFee(x){
+      var segs = [[100,0.015],[500,0.008],[1000,0.0045],[5000,0.0025],[10000,0.001],[100000,0.0005]];
+      var prev = 0, total = 0;
+      for(var i=0;i<segs.length;i++){
+        var cap = segs[i][0], rate = segs[i][1];
+        if(x > prev){
+          total += (Math.min(x, cap) - prev) * rate;
+          prev = cap;
+        } else break;
+      }
+      return total;
+    }
+
+    /* 核心测算：给定报价与人力配置，返回明细（单位：万元） */
+    function compute(price, fte, P){
+      var net = price / (1 + P.vat/100);
+      var vat = price - net;
+      var hr = fte.lead * P.costLead + fte.cons * P.costCons + fte.exec * P.costExec;
+      var fee = agencyFee(price);
+      var field = P.proj * (P.visitRate/100) * P.visitCost / 10000 + P.meetN * P.meetCost;
+      var archive = P.proj * P.repCost / 10000;
+      var sys = P.tool + P.survey;
+      var mgmt = net * P.mgmt / 100;
+      var cont = P.cont;
+      var cost = hr + fee + field + archive + sys + mgmt + cont;
+      var profit = net - cost;
+      return {
+        price: price, net: net, vat: vat, hr: hr, fee: fee, field: field,
+        archive: archive, sys: sys, mgmt: mgmt, cont: cont,
+        cost: cost, profit: profit,
+        rate: net > 0 ? profit / net * 100 : 0,
+        fteTotal: fte.lead + fte.cons + fte.exec
+      };
+    }
+
+    function readParams(){
+      return {
+        vat: v('pVat', 6),
+        costLead: v('pCostLead', 40),
+        costCons: v('pCostCons', 28),
+        costExec: v('pCostExec', 18),
+        proj: v('pProj', 290),
+        visitRate: v('pVisitRate', 20),
+        visitCost: v('pVisitCost', 800),
+        meetN: v('pMeetN', 12),
+        meetCost: v('pMeetCost', 1),
+        repCost: v('pRepCost', 150),
+        tool: v('pTool', 3),
+        survey: v('pSurvey', 3),
+        cont: v('pCont', 3),
+        mgmt: v('pMgmt', 8)
+      };
+    }
+    function readFte(){
+      return { lead: v('pFteLead', 0.5), cons: v('pFteCons', 1.5), exec: v('pFteExec', 3.5) };
+    }
+
+    /* 盈亏平衡报价：二分求解 */
+    function breakEven(fte, P){
+      var lo = 0, hi = 2000;
+      for(var i=0;i<80;i++){
+        var mid = (lo + hi) / 2;
+        var r = compute(mid, fte, P);
+        if(r.profit < 0) lo = mid; else hi = mid;
+      }
+      return hi;
+    }
+
+    var COLORS = ['#0E6B58','#3E8F79','#78B49C','#AECFBD','#C9B99A','#C99A6B','#B07A6B'];
+
+    function render(){
+      var P = readParams();
+      var fte = readFte();
+      var price = Math.min(v('pPrice', 215), 9999);
+      var r = compute(price, fte, P);
+
+      /* 顶部结论 */
+      var vr = document.getElementById('vRate');
+      vr.innerHTML = fmt(r.rate, 1) + '<small>%</small>';
+      vr.className = 'vval ' + (r.rate >= 10 ? 'pos' : (r.rate >= 0 ? 'mid' : 'neg'));
+
+      var vp = document.getElementById('vProfit');
+      vp.innerHTML = fmt(r.profit, 1) + '<small>万</small>';
+      vp.className = 'vval ' + (r.profit >= 0 ? 'pos' : 'neg');
+
+      var be = breakEven(fte, P);
+      var vb = document.getElementById('vBe');
+      vb.innerHTML = fmt(be, 1) + '<small>万</small>';
+      vb.className = 'vval ' + (be > 215 ? 'neg' : 'mid');
+
+      var unit = price * 10000 / Math.max(P.proj, 1);
+      var vu = document.getElementById('vUnit');
+      vu.innerHTML = fmt(unit, 0) + '<small>元</small>';
+
+      /* 明细 */
+      document.getElementById('rPrice').textContent = fmt(r.price) + ' 万元';
+      document.getElementById('rNet').textContent = fmt(r.net) + ' 万元';
+      document.getElementById('rVat').textContent = fmt(r.vat) + ' 万元';
+      document.getElementById('rFteNote').textContent = '合计 ' + fmt(r.fteTotal, 1) + ' 人年';
+      document.getElementById('rHr').textContent = fmt(r.hr) + ' 万元';
+      document.getElementById('rFee').textContent = fmt(r.fee) + ' 万元';
+      document.getElementById('rField').textContent = fmt(r.field) + ' 万元';
+      document.getElementById('rArchive').textContent = fmt(r.archive) + ' 万元';
+      document.getElementById('rSys').textContent = fmt(r.sys) + ' 万元';
+      document.getElementById('rMgmt').textContent = fmt(r.mgmt) + ' 万元';
+      document.getElementById('rCont').textContent = fmt(r.cont) + ' 万元';
+      document.getElementById('rCost').textContent = fmt(r.cost) + ' 万元';
+
+      var pr = document.getElementById('rProfit');
+      pr.textContent = fmt(r.profit) + ' 万元';
+      pr.className = 'v ' + (r.profit >= 0 ? 'pos' : 'neg');
+      document.getElementById('rProfitRow').className = 'rrow profit' + (r.profit < 0 ? ' loss' : '');
+
+      var rt = document.getElementById('rRate');
+      rt.textContent = fmt(r.rate, 1) + '%';
+      rt.style.color = r.rate >= 10 ? 'var(--accent)' : (r.rate >= 0 ? 'var(--warn)' : 'var(--risk)');
+
+      /* 成本构成条 */
+      var items = [
+        ['人力', r.hr], ['代理费', r.fee], ['踏勘与会议', r.field],
+        ['报告与档案', r.archive], ['系统与调查', r.sys], ['管理费', r.mgmt], ['不可预见', r.cont]
+      ];
+      var totalC = r.cost || 1;
+      var bar = document.getElementById('costBar');
+      var leg = document.getElementById('costLegend');
+      bar.innerHTML = '';
+      leg.innerHTML = '';
+      items.forEach(function(it, i){
+        if(it[1] <= 0) return;
+        var pct = it[1] / totalC * 100;
+        var seg = document.createElement('div');
+        seg.className = 'seg';
+        seg.style.width = pct + '%';
+        seg.style.background = COLORS[i % COLORS.length];
+        seg.title = it[0] + ' ' + fmt(it[1]) + ' 万元（' + fmt(pct, 1) + '%）';
+        bar.appendChild(seg);
+
+        var sp = document.createElement('span');
+        var ic = document.createElement('i');
+        ic.style.background = COLORS[i % COLORS.length];
+        sp.appendChild(ic);
+        sp.appendChild(document.createTextNode(it[0] + ' ' + fmt(pct, 1) + '%'));
+        leg.appendChild(sp);
+      });
+
+      /* 关键换算 */
+      document.getElementById('kUnit').innerHTML = fmt(unit, 0) + '<small>元/个</small>';
+
+      /* 单项目可承受直接人工：报价 - 税费 - 代理费 - 管理费 - 其他，再除以项目数，折算工时 */
+      var netUnit = r.net * 10000 / Math.max(P.proj, 1);
+      var overheadUnit = (r.fee + r.mgmt + r.field + r.archive + r.sys + r.cont) * 10000 / Math.max(P.proj, 1);
+      var laborUnit = Math.max(netUnit - overheadUnit, 0);
+      var avgCost = r.fteTotal > 0 ? r.hr / r.fteTotal : 0;  /* 万元/人年 */
+      var hoursPerUnit = avgCost > 0 ? (laborUnit / 10000) / avgCost * 1700 : 0;
+      var kh = document.getElementById('kHours');
+      kh.innerHTML = fmt(hoursPerUnit, 1) + '<small>小时/个</small>';
+      kh.className = hoursPerUnit >= 25 ? 'dd' : 'dd hot';
+      var kn = document.getElementById('kHoursNote');
+      if (kn) {
+        var actual = P.proj > 0 ? (r.fteTotal * 1700) / P.proj : 0;
+        kn.textContent = '上限；当前 ' + fmt(r.fteTotal, 1) + ' 人年实际约 ' + fmt(actual, 1) + ' 小时';
+      }
+
+      var perCap = r.fteTotal > 0 ? r.net / r.fteTotal : 0;
+      document.getElementById('kPerCap').innerHTML = fmt(perCap, 1) + '<small>万元/人年</small>';
+
+      var repPer = r.fteTotal > 0 ? P.proj / r.fteTotal : 0;
+      document.getElementById('kRepPer').innerHTML = fmt(repPer, 1) + '<small>份/人年</small>';
+
+      /* 情景矩阵 */
+      var configs = [
+        {name:'A 精简', note:'0.5 / 1.5 / 3.5 · 5.5 人年', fte:{lead:0.5, cons:1.5, exec:3.5}},
+        {name:'B 稳妥', note:'0.8 / 2.2 / 4.5 · 7.5 人年', fte:{lead:0.8, cons:2.2, exec:4.5}},
+        {name:'C 8人全职', note:'1 / 2 / 6 · 9 人年', fte:{lead:1, cons:2, exec:6}}
+      ];
+      var prices = [195, 200, 205, 210, 215];
+      var body = document.getElementById('matrixBody');
+      body.innerHTML = '';
+      configs.forEach(function(c){
+        var tr = document.createElement('tr');
+        var th = document.createElement('th');
+        th.scope = 'row';
+        th.innerHTML = c.name + '<span>' + c.note + '</span>';
+        tr.appendChild(th);
+        prices.forEach(function(p){
+          var rr = compute(p, c.fte, P);
+          var td = document.createElement('td');
+          td.textContent = fmt(rr.rate, 1) + '%';
+          var cls = 'c-na';
+          if(rr.rate >= 15) cls = 'c-ok';
+          else if(rr.rate >= 10) cls = 'c-fine';
+          else if(rr.rate >= 3) cls = 'c-thin';
+          else cls = 'c-bad';
+          td.className = cls;
+          td.title = c.name + ' · 报价 ' + p + ' 万：利润 ' + fmt(rr.profit) + ' 万元，成本 ' + fmt(rr.cost) + ' 万元';
+          tr.appendChild(td);
+        });
+        body.appendChild(tr);
+      });
+    }
+
+    var inputs = document.querySelectorAll('input[type=number]');
+    Array.prototype.forEach.call(inputs, function(el){
+      el.addEventListener('input', render);
+      el.addEventListener('change', render);
+    });
+    render();
+
+  }catch(err){
+    if(window.console && console.warn) console.warn('interactive layer unavailable:', err);
+  }
+})();
+</script>
+</body>
+</html>

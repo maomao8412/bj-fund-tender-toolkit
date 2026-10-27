@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>北京宣传文化引导基金 · 结项验收咨询服务投标工具</title>
+<meta name="description" content="北京宣传文化引导基金管理服务采购项目 01 包的投标自查清单、评分自测表与成本倒推模型。">
+<style>
+  :root{
+    --canvas:#F6F5F1;
+    --surface:#FFFFFF;
+    --ink:#1B2320;
+    --ink-2:#4A5651;
+    --ink-3:#7C8883;
+    --line:#DCD9D1;
+    --line-2:#EAE7E0;
+    --accent:#0E6B58;
+    --accent-soft:#E4EFEB;
+    --warn:#A9650D;
+    --warn-soft:#F7EDDD;
+    --risk:#9E2B25;
+    --risk-soft:#F7E5E3;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    --body:system-ui,-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:36px; --sp-7:56px;
+    --maxw:1180px;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--canvas);color:var(--ink);
+    font-family:var(--body);font-size:15px;line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  /* ---------- masthead ---------- */
+  .masthead{background:#141B19;color:#E8EDEA;padding:var(--sp-6) 0 var(--sp-5)}
+  .eyebrow{
+    margin:0 0 10px;font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:#7E948D;
+  }
+  .masthead h1{
+    margin:0;font-size:clamp(24px,3.2vw,36px);line-height:1.25;font-weight:650;
+    letter-spacing:-.015em;color:#fff;max-width:22em;
+  }
+  .masthead h1 em{font-style:normal;color:#7FCBAB}
+  .mast-sub{margin:14px 0 0;max-width:44em;font-size:14.5px;color:#A9B6B1;line-height:1.7}
+  .mast-sub b{color:#DCE5E1;font-weight:600}
+
+  .strip{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    margin-top:var(--sp-5);border-top:1px solid #2C3733;
+  }
+  .sc{padding:14px 16px 4px;border-right:1px solid #2C3733;min-width:0}
+  .sc:last-child{border-right:none}
+  .sc dt{font-size:11.5px;color:#7E948D;margin:0 0 2px;letter-spacing:.02em}
+  .sc dd{
+    margin:0;font-family:var(--mono);font-size:clamp(20px,2.6vw,27px);font-weight:600;
+    font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:1.15;color:#fff;
+  }
+  .sc dd small{font-size:.46em;font-weight:400;color:#8FA9A1;margin-left:3px;letter-spacing:0}
+  .sc dd.hot{color:#F0C070}
+
+  /* ---------- main ---------- */
+  main{padding:var(--sp-6) 0 var(--sp-7)}
+  h2{
+    margin:0 0 var(--sp-4);font-size:19px;font-weight:650;letter-spacing:-.01em;
+    display:flex;align-items:baseline;gap:10px;
+  }
+  h2 .n{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:600;letter-spacing:.06em}
+  .lede{margin:0 0 var(--sp-5);color:var(--ink-2);max-width:52em;font-size:14.5px}
+
+  /* ---------- tool cards ---------- */
+  .tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:var(--sp-4);margin-bottom:var(--sp-7)}
+  .tool{
+    display:flex;flex-direction:column;background:var(--surface);
+    border:1px solid var(--line);border-top:3px solid var(--accent);
+    padding:22px 24px 20px;position:relative;
+  }
+  .tool:nth-child(2){border-top-color:var(--warn)}
+  .tool h3{margin:0 0 6px;font-size:18px;font-weight:650;letter-spacing:-.01em}
+  .tool h3 a{color:var(--ink)}
+  .tool h3 a:hover{color:var(--accent);text-decoration:none}
+  .tool .kicker{
+    font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--ink-3);margin:0 0 10px;
+  }
+  .tool p{margin:0 0 14px;color:var(--ink-2);font-size:14px}
+  .tool ul{margin:0 0 18px;padding-left:18px;color:var(--ink-2);font-size:13.5px;line-height:1.75}
+  .tool ul li{margin-bottom:2px}
+  .tool ul li::marker{color:var(--ink-3)}
+  .tool .go{
+    margin-top:auto;display:inline-flex;align-items:center;gap:7px;align-self:flex-start;
+    background:var(--accent);color:#fff;padding:9px 18px;font-size:14px;font-weight:600;
+    border-radius:3px;transition:transform .12s ease,opacity .12s ease;
+  }
+  .tool:nth-child(2) .go{background:#8A5310}
+  .tool .go:hover{opacity:.9;text-decoration:none;transform:translateY(-1px)}
+  .tool .go:active{transform:translateY(0)}
+
+  /* ---------- verdict ---------- */
+  .verdicts{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:var(--sp-4);margin-bottom:var(--sp-7)}
+  .vd{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);padding:18px 20px}
+  .vd.w{border-left-color:var(--warn)}
+  .vd.r{border-left-color:var(--risk)}
+  .vd h4{margin:0 0 8px;font-size:14.5px;font-weight:650;letter-spacing:.01em}
+  .vd h4 .tag{
+    font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.08em;
+    padding:2px 6px;margin-right:8px;border-radius:2px;vertical-align:1px;
+  }
+  .vd .tag.g{background:var(--accent-soft);color:var(--accent)}
+  .vd .tag.y{background:var(--warn-soft);color:var(--warn)}
+  .vd .tag.rr{background:var(--risk-soft);color:var(--risk)}
+  .vd p{margin:0;font-size:13.5px;color:var(--ink-2);line-height:1.7}
+  .vd p + p{margin-top:8px}
+  .vd strong{color:var(--ink);font-weight:600}
+  .vd .num{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:600;color:var(--ink)}
+
+  /* ---------- table ---------- */
+  .tblwrap{background:var(--surface);border:1px solid var(--line);overflow-x:auto;margin-bottom:var(--sp-6)}
+  table{border-collapse:collapse;width:100%;min-width:520px;font-size:13.5px}
+  caption{
+    text-align:left;padding:12px 16px;font-size:12px;color:var(--ink-3);
+    border-bottom:1px solid var(--line-2);background:#FBFAF7;
+  }
+  th,td{padding:9px 16px;border-bottom:1px solid var(--line-2);text-align:left;vertical-align:top}
+  thead th{
+    font-size:11.5px;font-weight:600;color:var(--ink-3);letter-spacing:.06em;
+    text-transform:uppercase;background:#FBFAF7;border-bottom:1px solid var(--line);
+  }
+  tbody tr:last-child td{border-bottom:none}
+  td.k{color:var(--ink-3);white-space:nowrap;width:26%}
+  td.v{color:var(--ink)}
+  td.v b{font-weight:600}
+  .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+  /* ---------- note ---------- */
+  .note{
+    background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--ink-3);
+    padding:16px 20px;font-size:13px;color:var(--ink-2);line-height:1.75;
+  }
+  .note strong{color:var(--ink)}
+
+  footer{border-top:1px solid var(--line);padding:var(--sp-5) 0 var(--sp-6);color:var(--ink-3);font-size:12.5px;line-height:1.8}
+  footer p{margin:0 0 4px;max-width:62em}
+  footer code{font-family:var(--mono);font-size:12px;color:var(--ink-2)}
+
+  @media (max-width:640px){
+    .wrap{padding:0 18px}
+    .sc{border-right:none;border-bottom:1px solid #2C3733;padding:12px 0 4px}
+    .sc:last-child{border-bottom:none}
+    .masthead{padding:var(--sp-5) 0 var(--sp-4)}
+    .tools{grid-template-columns:1fr}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none !important}}
+  @media print{
+    body{background:#fff;font-size:10.5pt}
+    .masthead{background:#fff;color:#000;border-bottom:2px solid #000;padding:0 0 10px}
+    .masthead h1,.masthead h1 em{color:#000}
+    .mast-sub,.eyebrow,.sc dt{color:#333}
+    .strip{border-top:1px solid #999}
+    .sc{border-right:1px solid #ccc}
+    .sc dd,.sc dd.hot{color:#000}
+    .tool,.vd,.tblwrap,.note{break-inside:avoid;border:1px solid #999}
+    .tool .go{display:none}
+    a{color:#000;text-decoration:underline}
+    footer{color:#333}
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="eyebrow">Beijing Xuanchuan Culture Fund · Tender Toolkit · 01包</p>
+    <h1>北京宣传文化引导基金<em>委托结项验收</em>咨询服务投标工具</h1>
+    <p class="mast-sub">
+      项目编号 11000026210200185724-XM001 ／ 代理编号 JAXD2026-BJSZ-09059 ／ 采购人：北京市宣传思想文化人才发展中心。
+      <b>把 72 页招标文件压成两张可操作的表：一张逐项打勾，一张逐项算分，一张倒推成本。</b>
+    </p>
+
+    <dl class="strip">
+      <div class="sc"><dt>01 包预算 · 最高限价</dt><dd>215<small>万元</small></dd></div>
+      <div class="sc"><dt>年度结项验收项目</dt><dd>290<small>个起</small></dd></div>
+      <div class="sc"><dt>单项目收入</dt><dd>7,414<small>元</small></dd></div>
+      <div class="sc"><dt>利润率天花板</dt><dd class="hot">14.4<small>%</small></dd></div>
+    </dl>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <h2><span class="n">01</span>两个工具</h2>
+  <p class="lede">左边那张管「能不能投、材料齐不齐、能拿多少分」，右边那张管「这个价能不能做、人力投多少、利润在哪」。</p>
+
+  <div class="tools">
+    <article class="tool">
+      <p class="kicker">Checklist &amp; Scoring</p>
+      <h3><a href="https://maomao8412.github.io/bj-fund-tender-toolkit/checklist.html" target="_blank" rel="noopener noreferrer">投标自查清单与评分自测表</a></h3>
+      <p>41 项自查分 6 组，每项标注来源条款与失分后果；评分表按第四章原样建模，改数字即时重算。</p>
+      <ul>
+        <li>时间与平台 7 项 · 资格证明 7 项 · 实质性格式 6 项</li>
+        <li>评分证据 10 项 · 报价红线 7 项 · 合同履约 4 项</li>
+        <li>勾选状态自动保存，下次打开还在</li>
+        <li>评分自测自动列出补分优先级</li>
+      </ul>
+      <a class="go" href="https://maomao8412.github.io/bj-fund-tender-toolkit/checklist.html" target="_blank" rel="noopener noreferrer">打开自查清单 →</a>
+    </article>
+
+    <article class="tool">
+      <p class="kicker">Cost Back-Calculation</p>
+      <h3><a href="https://maomao8412.github.io/bj-fund-tender-toolkit/cost-model.html" target="_blank" rel="noopener noreferrer">成本倒推模型</a></h3>
+      <p>把人年投入、代理费、踏勘会议、档案、管理费全部拆开，实时算出利润率和盈亏平衡报价。</p>
+      <ul>
+        <li>参数全可调，结果即时联动</li>
+        <li>三档人力配置 × 五档报价的情境矩阵</li>
+        <li>单项目人力预算工时自动折算</li>
+        <li>数据来源与假设逐条标注</li>
+      </ul>
+      <a class="go" href="https://maomao8412.github.io/bj-fund-tender-toolkit/cost-model.html" target="_blank" rel="noopener noreferrer">打开成本模型 →</a>
+    </article>
+  </div>
+
+  <h2><span class="n">02</span>三条核心判断</h2>
+  <p class="lede">看完招标文件全文和成本模型之后，这个项目只有三个结论值得记住。</p>
+
+  <div class="verdicts">
+    <div class="vd">
+      <h4><span class="tag g">报价</span>价格只占 10 分，不要打价格战</h4>
+      <p>报价得分 =（最低价 ÷ 我方报价）× 10。从 <span class="num">195 万</span> 提到 <span class="num">215 万</span>，只损失 <span class="num">0.91</span> 分价格分，却多 20 万收入。</p>
+      <p>而技术方案五个子项（实施、质量、进度、应急、承诺，共 60 分）整体掉一档就丢 <strong>37 分</strong>。用价格换方案分是亏本买卖，<strong>报价要贴上限</strong>。</p>
+    </div>
+
+    <div class="vd w">
+      <h4><span class="tag y">人力</span>招标要的 8 人是「配置人数」，不是「全职工时」</h4>
+      <p>第五章要求总人数不少于 8 人（含负责人），评分表却要求<strong>不含负责人</strong>还要 8 人——要拿满这一项必须配 9 人。</p>
+      <p>但这 9 人是配置，不是工时。按 <span class="num">7.5 人年</span> 投入，215 万报价下亏 <span class="num">20.4 万</span>；按 <span class="num">9 人年</span> 投入亏 <span class="num">49.8 万</span>。<strong>实际投入压在 5.5 人年才成立。</strong></p>
+    </div>
+
+    <div class="vd r">
+      <h4><span class="tag rr">利润</span>天花板 14.4%，突破不了</h4>
+      <p>215 万封顶价、5.5 人年投入，利润率 <span class="num">14.4%</span>，利润 <span class="num">29.2 万</span>。想要 15% 利润，报价得是 <span class="num">216.6 万</span>——已经超限价。</p>
+      <p>盈亏平衡报价 <span class="num">181.1 万</span>。加上「两次验收不合格即解约、返还全款、赔偿全部损失」的违约条款，<strong>这个包的利润区间很薄，风险敞口却不小</strong>。</p>
+    </div>
+  </div>
+
+  <h2><span class="n">03</span>项目速览</h2>
+  <p class="lede">下面这些是招标文件里的硬数据，工具里所有计算都以它们为基准。</p>
+
+  <div class="tblwrap">
+    <table>
+      <caption>来源：《北京市政府采购项目公开招标文件》20261027110143.pdf，共 72 页</caption>
+      <thead>
+        <tr><th scope="col">项目</th><th scope="col">内容</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="k">项目名称</td><td class="v">北京宣传文化引导基金管理服务采购项目 · 01 包 北京宣传文化引导基金委托结项验收（咨询服务）（<b>二次</b>）</td></tr>
+        <tr><td class="k">采购人 / 代理</td><td class="v">北京市宣传思想文化人才发展中心 ／ 北京建安信达招标代理有限公司</td></tr>
+        <tr><td class="k">预算与限价</td><td class="v">总预算 448 万元；01 包 <b>215 万元（最高限价，超出即无效投标）</b></td></tr>
+        <tr><td class="k">投标保证金</td><td class="v">4 万元（民生银行北京朝阳门支行，截止时间同投标截止时间）</td></tr>
+        <tr><td class="k">获取招标文件</td><td class="v">2026-10-22 至 <b>2026-10-28</b>，须在平台按包下载，逾期无法提交电子投标文件</td></tr>
+        <tr><td class="k">投标截止 / 开标</td><td class="v"><b>2026-11-11 09:00</b>，远程电子开标，不接受纸质，解密限时 30 分钟</td></tr>
+        <tr><td class="k">服务期 / 有效期</td><td class="v">合同签订起 1 年 ／ 投标有效期 90 日历天</td></tr>
+        <tr><td class="k">联合体 / 分包</td><td class="v">均不允许</td></tr>
+        <tr><td class="k">评分结构</td><td class="v">价格 10 分 ＋ 商务 15 分（业绩）＋ 技术 75 分（团队 15、实施 15、质量 15、进度 10、应急 10、承诺 10）</td></tr>
+        <tr><td class="k">年度工作量</td><td class="v">结项、验收、跟踪项目不少于 <b>290 个</b>，每个项目须出具结项验收 / 成果验收 / 阶段性验收报告</td></tr>
+        <tr><td class="k">付款节奏</td><td class="v">签约后 50% → 2027 年 6–7 月 20% → 验收完成 30%；<b>以财政资金实际拨付为前提，延期支付不算违约</b></td></tr>
+        <tr><td class="k">代理服务费</td><td class="v">由中标人承担，服务类差额累进，215 万中标约 <b>2.42 万元</b></td></tr>
+        <tr><td class="k">履约保证金</td><td class="v">资料表未设（投标书模板中的表述为示范文本套话）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2><span class="n">04</span>使用说明</h2>
+  <div class="note">
+    <p style="margin:0 0 8px"><strong>自查清单</strong>的勾选状态保存在浏览器本地（localStorage），换设备或清缓存会丢失，重要节点建议打印留档。</p>
+    <p style="margin:0 0 8px"><strong>评分自测表</strong>默认填的是一家中等水平投标人的示例值（合计 65.84 分），请逐项改成你自己的实际情况；报价填到 215 万以上会直接提示投标无效。</p>
+    <p style="margin:0"><strong>成本倒推模型</strong>里，标「招标文件」的是原文硬数据，标「假设」的是可调参数（人年单价、踏勘比例、单次成本、月会频次等）。人年单价按北京地区咨询/审计类岗位的企业综合用工成本估算，请替换成你自己的真实数据再决策。</p>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>本页内容依据 <code>20261027110143.pdf</code>（北京市政府采购项目公开招标文件，72 页）整理，所有条款以招标文件原文为准。投标前请再核对一次招标文件正本与平台发布的澄清、修改公告。</p>
+    <p>成本模型中的单价与比例均为可调假设，不构成报价建议。</p>
+  </div>
+</footer>
+
+</body>
+</html>
